@@ -8,7 +8,7 @@ export default function App() {
         height='100vh'
         justify='center'
         align='center'
-        backgroundImage='../src/assets/background-home.jpg'
+        bgImage="url('/src/assets/background-home.jpg')"
         bgPosition='center'
         bgSize='cover'
         bgRepeat='no-repeat'
