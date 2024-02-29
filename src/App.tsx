@@ -3,6 +3,7 @@ import { Button, Image } from '@chakra-ui/react'
 
 import Logo from './assets/logo.png'
 import RemedioSolidario from './assets/logo branco.png'
+import Background from './assets/background-home.jpg'
 
 export default function App() {
   return (
@@ -11,7 +12,7 @@ export default function App() {
         height='100vh'
         justify='center'
         align='center'
-        bgImage='url("/src/assets/background-home.jpg")'
+        bgImage={`url(${Background})`}
         bgPosition='center'
         bgSize='cover'
         bgRepeat='no-repeat'
