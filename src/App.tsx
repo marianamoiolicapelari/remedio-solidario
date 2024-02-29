@@ -8,7 +8,7 @@ export default function App() {
         height='100vh'
         justify='center'
         align='center'
-        backgroundImage='../src/assets/image/background-home.jpg'
+        backgroundImage='../src/assets/background-home.jpg'
         bgPosition='center'
         bgSize='cover'
         bgRepeat='no-repeat'
@@ -23,13 +23,13 @@ export default function App() {
           boxShadow='md'
         >
           <Image
-            src='../src/assets/image/logo.png'
+            src='../src/assets/logo.png'
             alt='Imagem mãos com remédio'
             boxSize='120px'
             mb='8'
           />
           <Image
-            src='../src/assets/image/logo branco.png'
+            src='../src/assets/logo branco.png'
             alt='Logo projeto Remédio Solidário'
             width='220px'
             mb='10'
