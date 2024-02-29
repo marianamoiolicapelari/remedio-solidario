@@ -11,7 +11,7 @@ export default function App() {
         height='100vh'
         justify='center'
         align='center'
-        bgImage="url('/src/assets/background-home.jpg')"
+        bgImage='url("/src/assets/background-home.jpg")'
         bgPosition='center'
         bgSize='cover'
         bgRepeat='no-repeat'
@@ -29,13 +29,13 @@ export default function App() {
             src={Logo}
             alt='Imagem mãos com remédio'
             boxSize='120px'
-            mb='8'
+            mb='12'
           />
           <Image
             src={RemedioSolidario}
             alt='Logo projeto Remédio Solidário'
             width='220px'
-            mb='10'
+            mb='16'
           />
           <Button
             variant='outline'
