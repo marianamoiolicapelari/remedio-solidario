@@ -1,6 +1,9 @@
 import { Flex } from "@chakra-ui/react"
 import { Button, Image } from '@chakra-ui/react'
 
+import Logo from './assets/logo.png'
+import RemedioSolidario from './assets/logo branco.png'
+
 export default function App() {
   return (
     <>
@@ -23,13 +26,13 @@ export default function App() {
           boxShadow='md'
         >
           <Image
-            src='../src/assets/logo.png'
+            src={Logo}
             alt='Imagem mãos com remédio'
             boxSize='120px'
             mb='8'
           />
           <Image
-            src='../src/assets/logo branco.png'
+            src={RemedioSolidario}
             alt='Logo projeto Remédio Solidário'
             width='220px'
             mb='10'
