@@ -1,11 +1,18 @@
-import { Flex } from "@chakra-ui/react"
+import { useNavigate } from 'react-router-dom'
+import { Flex } from '@chakra-ui/react'
 import { Button, Image } from '@chakra-ui/react'
 
-import Logo from './assets/logo.png'
-import RemedioSolidario from './assets/logo branco.png'
-import Background from './assets/background-home.jpg'
+import Logo from '../../assets/logo.png'
+import RemedioSolidario from '../../assets/logo branco.png'
+import Background from '../../assets/background-home.jpg'
 
-export default function App() {
+export default function Login() {
+  const navigate = useNavigate()
+
+  const handleClick = () => {
+    navigate('/home')
+  }
+  
   return (
     <>
       <Flex
@@ -39,6 +46,7 @@ export default function App() {
             mb='16'
           />
           <Button
+            onClick={handleClick}
             variant='outline'
             color='white'
             width='150px'
