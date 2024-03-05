@@ -1,24 +1,99 @@
 import { Outlet, Link } from 'react-router-dom'
+import React, { useState } from 'react'
+import { IoIosArrowDown } from "react-icons/io"
+import { Box, Flex, Image, List, UnorderedList } from '@chakra-ui/react'
 
-interface HomeProps {}
+import { ItemsMenu } from '../../common/ItemsMenu'
+
+import Logo from '../../assets/logo.png'
+
+interface HomeProps { }
 
 const Home: React.FC<HomeProps> = () => {
-  console.log("Renderizando Home")
+
+  const [submenuOpen, setSubmenuOpen] = useState<{ [key: number]: boolean }>(
+    ItemsMenu.reduce((acc, _, index) => ({ ...acc, [index]: false }), {})
+  )
+
+  const toggleSubmenu = (index: number) => {
+    setSubmenuOpen((prev) => ({ ...prev, [index]: !prev[index] }))
+  }
+
   return (
-    <div style={{ display: 'flex' }}>
-      <div style={{ height: '100vh', width: '250px', backgroundColor: '#247ba0', padding: '20px' }}>
-        <nav>
-          <ul>
-            <li><Link to="/home/paciente">Paciente</Link></li>
-            <li><Link to="/home/medicamento">Medicamento</Link></li>
-            <li><Link to="/home/dispensacao">Dispensação</Link></li>
-          </ul>
-        </nav>
-      </div>
-      <div style={{ flex: 1, padding: '20px', backgroundColor: 'white'}}>
+    <Flex
+      align='center'
+    >
+      <Box
+        height='100vh'
+        width='250px'
+        backgroundColor='#247ba0'
+        color='white'
+      >
+        <Flex
+          align='center'
+          justify='center'
+          m='5'
+        >
+          <Image
+            src={Logo}
+            alt='Imagem mãos com remédio'
+            width='70px'
+          />
+        </Flex>
+
+        <Flex mt={10}>
+          <UnorderedList ml={2}>
+            {ItemsMenu.map((menu, index) => (
+              <React.Fragment key={index}>
+                <Flex
+                  align='center'
+                  justifyItems={'flex-start'}
+                  gap={4}
+                  width='230px'
+                  mb={1}
+                  p={2}
+                  _hover={{ backgroundColor: 'whiteAlpha.800', color: '#247ba0', borderRadius: '8' }}
+                  style={{ cursor: 'pointer' }}
+                >
+                  <span style={{ fontSize: '18px' }}>
+                    {menu.icon ? menu.icon : ''}
+                  </span>
+                  <span
+                    style={{ fontSize: '18px' }}
+                    onClick={() => toggleSubmenu(index)}
+                  >
+                    {menu.title}
+                  </span>
+                  {menu.submenu && (
+                    <IoIosArrowDown
+                      style={{ transform: submenuOpen[index] ? "rotate(180deg)" : "" }}
+                      onClick={() => toggleSubmenu(index)}
+                    />
+                  )}
+                </Flex>
+                {menu.submenu && submenuOpen[index] && (
+                  <List mb={5} p={1} _hover={{ backgroundColor: 'whiteAlpha.800', color: '#247ba0', borderRadius: '6' }}>
+                    {menu.submenuItems.map((submenuItem, subIndex) => (
+                      <Link
+                        to={submenuItem.path} key={subIndex}
+                        style={{ fontSize: '16px', marginLeft: '40px' }}
+                        onClick={() => { toggleSubmenu(index) }}
+                      >
+                        {submenuItem.title}
+                      </Link>
+                    ))}
+                  </List>
+                )}
+              </React.Fragment>
+            ))}
+          </UnorderedList>
+        </Flex>
+      </Box>
+
+      <Box style={{ flex: 1 }}>
         <Outlet />
-      </div>
-    </div>
+      </Box>
+    </Flex>
   )
 }
 

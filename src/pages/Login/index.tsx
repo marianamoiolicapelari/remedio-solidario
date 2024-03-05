@@ -3,14 +3,14 @@ import { Flex } from '@chakra-ui/react'
 import { Button, Image } from '@chakra-ui/react'
 
 import Logo from '../../assets/logo.png'
-import RemedioSolidario from '../../assets/logo branco.png'
+import RemedioSolidario from '../../assets/logo-branco.png'
 import Background from '../../assets/background-home.jpg'
 
 export default function Login() {
   const navigate = useNavigate()
 
   const handleClick = () => {
-    navigate('/home')
+    navigate('/home/paciente')
   }
   
   return (

@@ -1,6 +1,19 @@
-export default function Paciente() {
-  console.log("Renderizando Paciente")
+import { Box, Heading } from '@chakra-ui/react'
+import { Footer, Header } from '../../components'
+
+interface PacienteProps {}
+
+const Paciente: React.FC<PacienteProps> = () => {
+  
   return (
-    <h1 style={{  color: 'blue' }}>Paciente</h1>
+    <>
+    <Header />
+    <Box height='calc(100vh - 115px)'>
+    <Heading>Paciente</Heading>
+    </Box>
+    <Footer />
+    </>
   )
 }
+
+export default Paciente
