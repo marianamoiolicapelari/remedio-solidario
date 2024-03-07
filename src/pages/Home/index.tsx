@@ -47,23 +47,26 @@ const Home: React.FC<HomeProps> = () => {
               <React.Fragment key={index}>
                 <Flex
                   align='center'
-                  justifyItems={'flex-start'}
-                  gap={4}
+                  justifyContent='space-between'                  
                   width='230px'
                   mb={1}
                   p={2}
+                  cursor='pointer'
                   _hover={{ backgroundColor: 'whiteAlpha.800', color: '#247ba0', borderRadius: '8' }}
-                  style={{ cursor: 'pointer' }}
                 >
-                  <span style={{ fontSize: '18px' }}>
-                    {menu.icon ? menu.icon : ''}
-                  </span>
-                  <span
-                    style={{ fontSize: '18px' }}
-                    onClick={() => toggleSubmenu(index)}
-                  >
-                    {menu.title}
-                  </span>
+                  <Flex align='center' gap={4}>
+                    <Box
+                      fontSize={20}
+                    >
+                      {menu.icon ? menu.icon : ''}
+                    </Box>
+                    <Box
+                      fontSize={20}
+                      onClick={() => toggleSubmenu(index)}
+                    >
+                      {menu.title}
+                    </Box>
+                  </Flex>
                   {menu.submenu && (
                     <IoIosArrowDown
                       style={{ transform: submenuOpen[index] ? "rotate(180deg)" : "" }}
@@ -90,7 +93,7 @@ const Home: React.FC<HomeProps> = () => {
         </Flex>
       </Box>
 
-      <Box style={{ flex: 1 }}>
+      <Box flex={1}>
         <Outlet />
       </Box>
     </Flex>
