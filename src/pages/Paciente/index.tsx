@@ -54,6 +54,7 @@ const Paciente: React.FC<Props> = () => {
     formData.append('address', values.address)
 
     console.log('Dados enviados', values)
+    console.log("formdata", Array.from(formData.entries()))
   }
 
   return (
