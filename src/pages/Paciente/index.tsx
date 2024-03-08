@@ -3,12 +3,6 @@ import { Footer, Header } from '../../components'
 import { Formik, Field, Form } from 'formik'
 import * as Yup from 'yup'
 
-type Props = {
-  cpf: string
-  fullName: string
-  address: string
-}
-
 interface FormData {
   cpf: string
   fullName: string
@@ -33,7 +27,7 @@ const validateCPF = (cpf: string) => {
   return true
 }
 
-const Paciente: React.FC<Props> = () => {
+const Paciente = () => {
   const initialValues: FormData = {
     cpf: '',
     fullName: '',
