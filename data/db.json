@@ -1,0 +1,22 @@
+{
+  "paciente": [
+    {
+      "id": "1",
+      "cpf": "123.456.789-00",
+      "nome": "João da Silva",
+      "endereço": "Rua das Rosas, 23 - Centro"
+    },
+    {
+      "id": "2",
+      "cpf": "789.456.123-00",
+      "nome": "Antônio Pereira",
+      "endereço": "Rua das Orquideas, 52 - Centro"
+    },
+    {
+      "id": "3",
+      "cpf": "456.123.789-00",
+      "nome": "Maria da Silva",
+      "endereço": "Rua das Palmeiras, 66 - Centro"
+    }
+  ]
+}

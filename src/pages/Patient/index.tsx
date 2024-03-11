@@ -1,7 +1,9 @@
 import { Box, Button, Flex, FormControl, FormLabel, Input, Text } from '@chakra-ui/react'
 import { Footer, Header } from '../../components'
-import { Formik, Field, Form } from 'formik'
+import { Formik, Field, Form, FormikHelpers } from 'formik'
 import * as Yup from 'yup'
+import { api } from '../../services/api'
+import { toast } from 'react-toastify'
 
 interface FormData {
   cpf: string
@@ -40,15 +42,30 @@ const Patient = () => {
     address: Yup.string().required('Endereço é obrigatório'),
   });
 
-  const handleSubmitForm = (values: FormData) => {
-    const formData = new FormData()
+  const handleSubmitForm = async (values: FormData, { resetForm }: FormikHelpers<FormData>) => {
+    // const formData = new FormData()
+    // formData.append('cpf', values.cpf)
+    // formData.append('fullName', values.fullName)
+    // formData.append('address', values.address)
 
-    formData.append('cpf', values.cpf)
-    formData.append('fullName', values.fullName)
-    formData.append('address', values.address)
+    try {
+      const { status } = await api.post('/paciente', values, {
+        headers: {
+          'Content-Type': 'application/json'
+        }
+      })
 
-    console.log('Dados enviados', values)
-    console.log("formdata", Array.from(formData.entries()))
+      if (status === 201 || status === 200) {
+        toast.success('Paciente cadastrado com sucesso!')
+        resetForm()
+      }
+      if (status === 409) {
+        toast.error('Paciente já cadastrado')
+      }
+
+    } catch (err) {
+      toast.error('Falha no sistema! Tente novamente')
+    }
   }
 
   return (
