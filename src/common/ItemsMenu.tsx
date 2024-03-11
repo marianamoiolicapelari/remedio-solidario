@@ -19,7 +19,8 @@ export const ItemsMenu: MenuItem[] = [
         icon: <IoPersonCircleSharp />,
         submenu: true,
         submenuItems: [
-            { title: "Novo Paciente", path: "/home/paciente" }
+            { title: "Novo Paciente", path: "/home/paciente" },
+            { title: "Pacientes Cadastrados", path: "/home/lista-paciente" }
         ]
     },
     {
@@ -27,7 +28,8 @@ export const ItemsMenu: MenuItem[] = [
         icon: <GiMedicines />,
         submenu: true,
         submenuItems: [
-            { title: "Novo Medicamento", path: "/home/medicamento" }           
+            { title: "Novo Medicamento", path: "/home/medicamento" },
+            { title: "Lista de Medicamentos", path: "/home/lista-medicamento" }           
         ]
     },
     {

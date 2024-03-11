@@ -1,4 +1,4 @@
-import { Outlet, Link } from 'react-router-dom'
+import { Outlet, NavLink } from 'react-router-dom'
 import React, { useState } from 'react'
 import { IoIosArrowDown } from "react-icons/io"
 import { Box, Flex, Image, List, UnorderedList } from '@chakra-ui/react'
@@ -25,7 +25,7 @@ const Home: React.FC<HomeProps> = () => {
     >
       <Box
         height='100vh'
-        width='250px'
+        width='270px'
         backgroundColor='#247ba0'
         color='white'
       >
@@ -42,13 +42,13 @@ const Home: React.FC<HomeProps> = () => {
         </Flex>
 
         <Flex mt={10}>
-          <UnorderedList ml={2}>
+          <UnorderedList ml={3}>
             {ItemsMenu.map((menu, index) => (
               <React.Fragment key={index}>
                 <Flex
                   align='center'
-                  justifyContent='space-between'                  
-                  width='230px'
+                  justifyContent='space-between'
+                  width='250px'
                   mb={1}
                   p={2}
                   cursor='pointer'
@@ -75,15 +75,20 @@ const Home: React.FC<HomeProps> = () => {
                   )}
                 </Flex>
                 {menu.submenu && submenuOpen[index] && (
-                  <List mb={5} p={1} _hover={{ backgroundColor: 'whiteAlpha.800', color: '#247ba0', borderRadius: '6' }}>
+                  <List mb={5}>
                     {menu.submenuItems.map((submenuItem, subIndex) => (
-                      <Link
-                        to={submenuItem.path} key={subIndex}
-                        style={{ fontSize: '16px', marginLeft: '40px' }}
+                      <Flex
+                        as={NavLink}                     
+                        fontSize='16px'
+                        ml='40px'
+                        mb={1}
+                        p={1}
+                        _hover={{ backgroundColor: 'whiteAlpha.800', color: '#247ba0', borderRadius: '6' }}
+                        to={submenuItem.path} key={subIndex}                       
                         onClick={() => { toggleSubmenu(index) }}
                       >
                         {submenuItem.title}
-                      </Link>
+                      </Flex>
                     ))}
                   </List>
                 )}
