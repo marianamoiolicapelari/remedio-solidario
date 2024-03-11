@@ -1,19 +1,19 @@
 import { Box, Heading } from '@chakra-ui/react'
 import { Footer, Header } from '../../components'
 
-interface DispensacaoProps {}
 
-const Dispensacao: React.FC<DispensacaoProps> = () => {
+
+const Medicine = () => {
   
   return (
     <>
     <Header />
     <Box height='calc(100vh - 115px)'>
-    <Heading>Dispensacao</Heading>
+    <Heading>Medicamento</Heading>
     </Box>
     <Footer />
     </>
   )
 }
 
-export default Dispensacao
+export default Medicine

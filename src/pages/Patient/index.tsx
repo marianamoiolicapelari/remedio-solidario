@@ -27,7 +27,7 @@ const validateCPF = (cpf: string) => {
   return true
 }
 
-const Paciente = () => {
+const Patient = () => {
   const initialValues: FormData = {
     cpf: '',
     fullName: '',
@@ -110,4 +110,4 @@ const Paciente = () => {
   )
 }
 
-export default Paciente
+export default Patient
