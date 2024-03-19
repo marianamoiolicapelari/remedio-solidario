@@ -1,5 +1,5 @@
 import { Box, Text, Table, Thead, Tbody, Tr, Th, Td, TableContainer, Button, Flex, Tooltip, Input, FormControl, FormLabel } from '@chakra-ui/react'
-import { Footer, Header, BaseModal } from '../../components'
+import { Footer, Header, BaseModal, Pagination } from '../../components'
 import { MdOutlineEdit, MdDeleteOutline } from 'react-icons/md'
 import { api } from '../../services/api'
 import { useEffect, useState } from 'react'
@@ -17,6 +17,9 @@ const PatientRegistration = () => {
   const [isEditModalOpen, setIsEditModalOpen] = useState(false)
   const [selectedPatient, setSelectedPatient] = useState<FormData | null>(null)
   const [editedPatient, setEditedPatient] = useState<FormData | null>(null)
+  const [currentPage, setCurrentPage] = useState(1)
+  const [patientsPerPage] = useState(5) // Defina o número de pacientes por página
+
 
   console.log(selectedPatient)
 
@@ -32,6 +35,18 @@ const PatientRegistration = () => {
 
     fetchData()
   }, [])
+
+  // Função para lidar com a mudança de página
+  const handlePageChange = (pageNumber: number) => {
+    setCurrentPage(pageNumber);
+  };
+
+  // Função para obter os pacientes da página atual
+  const getCurrentPatients = () => {
+    const indexOfLastPatient = currentPage * patientsPerPage;
+    const indexOfFirstPatient = indexOfLastPatient - patientsPerPage;
+    return patients.slice(indexOfFirstPatient, indexOfLastPatient);
+  };
 
   const handleEditPatient = (patient: FormData) => {
     setSelectedPatient(patient)
@@ -84,9 +99,9 @@ const PatientRegistration = () => {
   return (
     <>
       <Header />
-      <Box height='calc(100vh - 115px)' p={8}>
+      <Flex direction='column' height='calc(100vh - 115px)' p={8} >
         <Text fontWeight="bold" fontSize='xl' mb={8}>Pacientes cadastrados</Text>
-        <Box height={'auto'} maxHeight="60vh" overflowY="auto">
+        <Box height="60vh" overflowY="auto" >
           <TableContainer>
             <Table variant='simple' colorScheme='blue'>
               <Thead>
@@ -98,7 +113,7 @@ const PatientRegistration = () => {
                 </Tr>
               </Thead>
               <Tbody>
-                {patients && patients.map(patient => (
+                {getCurrentPatients().map(patient => (
                   <Tr key={patient.id} >
                     <Td w='10%'>{patient.cpf}</Td>
                     <Td >{patient.fullName}</Td>
@@ -123,7 +138,13 @@ const PatientRegistration = () => {
             </Table>
           </TableContainer>
         </Box>
-      </Box>
+   
+        <Pagination
+          currentPage={currentPage}
+          totalPages={Math.ceil(patients.length / patientsPerPage)}
+          onPageChange={handlePageChange}
+        />
+      </Flex>
       <Footer />
 
       <BaseModal
