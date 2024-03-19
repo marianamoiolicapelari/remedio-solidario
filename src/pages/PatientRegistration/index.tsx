@@ -1,11 +1,11 @@
-import { Box, Text, Table, Thead, Tbody, Tr, Th, Td, TableContainer, Button, Flex, Tooltip } from '@chakra-ui/react'
-import { Footer, Header } from '../../components'
+import { Box, Text, Table, Thead, Tbody, Tr, Th, Td, TableContainer, Button, Flex, Tooltip, Input, FormControl, FormLabel } from '@chakra-ui/react'
+import { Footer, Header, BaseModal } from '../../components'
 import { MdOutlineEdit, MdDeleteOutline } from 'react-icons/md'
 import { api } from '../../services/api'
 import { useEffect, useState } from 'react'
 
 interface FormData {
-  id: number
+  id: string
   cpf: string
   fullName: string
   address: string
@@ -13,6 +13,11 @@ interface FormData {
 
 const PatientRegistration = () => {
   const [patients, setPatients] = useState<FormData[]>([])
+  const [isEditModalOpen, setIsEditModalOpen] = useState(false)
+  const [selectedPatient, setSelectedPatient] = useState<FormData | null>(null)
+  const [editedPatient, setEditedPatient] = useState<FormData | null>(null)
+
+  console.log(selectedPatient)
 
   useEffect(() => {
     const fetchData = async () => {
@@ -22,18 +27,55 @@ const PatientRegistration = () => {
       } catch (error) {
         console.error('Erro ao buscar pacientes:', error)
       }
-    };
+    }
 
     fetchData()
   }, [])
 
-  const handleDeletePatient = async (id: number) => {
+  const handleEditPatient = (patient: FormData) => {
+    setSelectedPatient(patient)
+    setEditedPatient({ ...patient })
+    setIsEditModalOpen(true) 
+  }
+
+  const handleModalClose = () => {
+    setIsEditModalOpen(false)
+    setSelectedPatient(null)
+    setEditedPatient(null)
+  }
+
+  const handleDeletePatient = async (id: string) => {
     try {
       await api.delete(`/patients/${id}`)
       setPatients(patients.filter(patient => patient.id !== id))
       console.log(patients)
     } catch (error) {
       console.error('Erro ao excluir paciente:', error)
+    }
+  }
+
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { name, value } = e.target
+    if (editedPatient) {
+      const updatedPatient = {
+        ...(editedPatient as FormData),
+        [name]: value,
+      }
+      setEditedPatient(updatedPatient)
+    }
+  }
+
+  const handleSubmit = async () => {
+    if (editedPatient) {
+      try {
+        await api.put(`/patients/${editedPatient.id}`, editedPatient)
+        setPatients(patients.map(patient => (patient.id === editedPatient.id ? editedPatient : patient)))
+        setIsEditModalOpen(false)
+        setSelectedPatient(null)
+        setEditedPatient(null)
+      } catch (error) {
+        console.error('Erro ao atualizar paciente:', error)
+      }
     }
   }
 
@@ -61,13 +103,13 @@ const PatientRegistration = () => {
                   <Td>
                     <Flex justify={'end'}>
                       <Tooltip label='Editar' fontSize='md' placement='top'>
-                        <Button mr={2}>
+                        <Button mr={2} onClick={() => handleEditPatient(patient)}>
                           <MdOutlineEdit />
                         </Button>
                       </Tooltip>
                       <Tooltip label='Excluir' fontSize='md' placement='top'>
-                        <Button mr={2}>
-                          <MdDeleteOutline onClick={() => handleDeletePatient(patient.id)}/>
+                        <Button mr={2} onClick={() => handleDeletePatient(patient.id)}>
+                          <MdDeleteOutline />
                         </Button>
                       </Tooltip>
                     </Flex>
@@ -77,9 +119,30 @@ const PatientRegistration = () => {
             </Tbody>
           </Table>
         </TableContainer>
-
       </Box>
       <Footer />
+
+      <BaseModal
+        isOpen={isEditModalOpen}
+        onClose={handleModalClose}
+        modalHeaderText="Editar Dados do Paciente"
+        modalFooter={<Button type="submit" colorScheme="blue" mt={3} onClick={handleSubmit}>Salvar</Button>}
+      >
+        <Box as="form" >
+          <FormControl>
+            <FormLabel>CPF</FormLabel>
+            <Input type="text" name="cpf" value={editedPatient?.cpf} onChange={handleInputChange} />
+          </FormControl>
+          <FormControl>
+            <FormLabel mt={4}>Nome do Paciente</FormLabel>
+            <Input type="text" name="fullName" value={editedPatient?.fullName} onChange={handleInputChange} />
+          </FormControl>
+          <FormControl>
+            <FormLabel mt={4}>Endereço</FormLabel>
+            <Input type="text" name="address" value={editedPatient?.address} onChange={handleInputChange} />
+          </FormControl>
+        </Box>
+      </BaseModal>
     </>
   )
 }

@@ -1,5 +1,5 @@
 import Header from "./Header"
 import Footer from "./Footer"
-import ModalEditPatient from "./ModalEditPatient"
+import BaseModal from "./Modal"
 
-export { Header, Footer, ModalEditPatient }
+export { Header, Footer, BaseModal }
