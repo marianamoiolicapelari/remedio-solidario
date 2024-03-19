@@ -3,6 +3,7 @@ import { Footer, Header, BaseModal } from '../../components'
 import { MdOutlineEdit, MdDeleteOutline } from 'react-icons/md'
 import { api } from '../../services/api'
 import { useEffect, useState } from 'react'
+import { toast } from 'react-toastify'
 
 interface FormData {
   id: string
@@ -35,7 +36,7 @@ const PatientRegistration = () => {
   const handleEditPatient = (patient: FormData) => {
     setSelectedPatient(patient)
     setEditedPatient({ ...patient })
-    setIsEditModalOpen(true) 
+    setIsEditModalOpen(true)
   }
 
   const handleModalClose = () => {
@@ -73,8 +74,9 @@ const PatientRegistration = () => {
         setIsEditModalOpen(false)
         setSelectedPatient(null)
         setEditedPatient(null)
-      } catch (error) {
-        console.error('Erro ao atualizar paciente:', error)
+        toast.success('Dados atualizados com sucesso!')
+      } catch (err) {
+        toast.error('Erro ao atualizar paciente!')
       }
     }
   }
@@ -84,41 +86,43 @@ const PatientRegistration = () => {
       <Header />
       <Box height='calc(100vh - 115px)' p={8}>
         <Text fontWeight="bold" fontSize='xl' mb={8}>Pacientes cadastrados</Text>
-        <TableContainer>
-          <Table variant='simple' colorScheme='blue'>
-            <Thead>
-              <Tr>
-                <Th>CPF</Th>
-                <Th>Nome Paciente</Th>
-                <Th>Endereço</Th>
-                <Th></Th>
-              </Tr>
-            </Thead>
-            <Tbody>
-              {patients && patients.map(patient => (
-                <Tr key={patient.id} >
-                  <Td w='10%'>{patient.cpf}</Td>
-                  <Td >{patient.fullName}</Td>
-                  <Td >{patient.address}</Td>
-                  <Td>
-                    <Flex justify={'end'}>
-                      <Tooltip label='Editar' fontSize='md' placement='top'>
-                        <Button mr={2} onClick={() => handleEditPatient(patient)}>
-                          <MdOutlineEdit />
-                        </Button>
-                      </Tooltip>
-                      <Tooltip label='Excluir' fontSize='md' placement='top'>
-                        <Button mr={2} onClick={() => handleDeletePatient(patient.id)}>
-                          <MdDeleteOutline />
-                        </Button>
-                      </Tooltip>
-                    </Flex>
-                  </Td>
+        <Box height={'auto'} maxHeight="60vh" overflowY="auto">
+          <TableContainer>
+            <Table variant='simple' colorScheme='blue'>
+              <Thead>
+                <Tr>
+                  <Th>CPF</Th>
+                  <Th>Nome Paciente</Th>
+                  <Th>Endereço</Th>
+                  <Th></Th>
                 </Tr>
-              ))}
-            </Tbody>
-          </Table>
-        </TableContainer>
+              </Thead>
+              <Tbody>
+                {patients && patients.map(patient => (
+                  <Tr key={patient.id} >
+                    <Td w='10%'>{patient.cpf}</Td>
+                    <Td >{patient.fullName}</Td>
+                    <Td >{patient.address}</Td>
+                    <Td>
+                      <Flex justify={'end'}>
+                        <Tooltip label='Editar' fontSize='md' placement='top'>
+                          <Button mr={2} onClick={() => handleEditPatient(patient)}>
+                            <MdOutlineEdit />
+                          </Button>
+                        </Tooltip>
+                        <Tooltip label='Excluir' fontSize='md' placement='top'>
+                          <Button mr={2} onClick={() => handleDeletePatient(patient.id)}>
+                            <MdDeleteOutline />
+                          </Button>
+                        </Tooltip>
+                      </Flex>
+                    </Td>
+                  </Tr>
+                ))}
+              </Tbody>
+            </Table>
+          </TableContainer>
+        </Box>
       </Box>
       <Footer />
 
