@@ -49,7 +49,7 @@ const Patient = () => {
     // formData.append('address', values.address)
 
     try {
-      const { status } = await api.post('/paciente', values, {
+      const { status } = await api.post('/patients', values, {
         headers: {
           'Content-Type': 'application/json'
         }
