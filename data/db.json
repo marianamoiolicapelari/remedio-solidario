@@ -150,5 +150,49 @@
       "fullName": "Regina Ferreira",
       "address": "Avenida das Carambolas, 11 - Centro"
     }
+  ],
+  "medicaments": [
+    {
+      "id": 1,
+      "medicament": "Paracetamol",
+      "quantity": 100,
+      "expirationDate": "2024-12-31"
+    },
+    {
+      "id": 2,
+      "medicament": "Ibuprofeno",
+      "quantity": 50,
+      "expirationDate": "2023-10-15"
+    },
+    {
+      "id": 3,
+      "medicament": "Amoxicilina",
+      "quantity": 75,
+      "expirationDate": "2025-05-20"
+    },
+    {
+      "id": "e506",
+      "medicament": "Dipirona",
+      "quantity": "50",
+      "expirationDate": "2024-03-30"
+    },
+    {
+      "id": "04b4",
+      "medicament": "Magnésio Dimalato",
+      "quantity": "10",
+      "expirationDate": "2024-07-19"
+    },
+    {
+      "id": "8df0",
+      "medicament": "Aspirina ",
+      "quantity": "41",
+      "expirationDate": "2024-05-12"
+    },
+    {
+      "id": "0052",
+      "medicament": "Dipirona 1g",
+      "quantity": "20",
+      "expirationDate": "2024-04-06"
+    }
   ]
 }

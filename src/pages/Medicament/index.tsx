@@ -31,18 +31,18 @@ const Medicament = () => {
     // formData.append('address', values.address)
 
     try {
-      const { status } = await api.post('/medicamento', values, {
+      const { status } = await api.post('/medicaments', values, {
         headers: {
           'Content-Type': 'application/json'
         }
       })
 
       if (status === 201 || status === 200) {
-        toast.success('Paciente cadastrado com sucesso!')
+        toast.success('Medicamento cadastrado com sucesso!')
         resetForm()
       }
       if (status === 409) {
-        toast.error('Paciente já cadastrado')
+        toast.error('Medicamento já cadastrado')
       }
 
     } catch (err) {
