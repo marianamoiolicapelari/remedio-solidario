@@ -4,6 +4,7 @@ import { MdOutlineEdit, MdDeleteOutline } from 'react-icons/md'
 import { api } from '../../services/api'
 import { useEffect, useState } from 'react'
 import { toast } from 'react-toastify'
+import FormattedDate from '../../common/FormattedDate'
 
 interface FormData {
   id: string
@@ -117,7 +118,7 @@ const MedicamentRegistration = () => {
                   <Tr key={medicament.id} >
                     <Td w='50%'>{medicament.medicament}</Td>
                     <Td w='20%'>{medicament.quantity}</Td>
-                    <Td w='20%'>{medicament.expirationDate}</Td>
+                    <Td w='20%'><FormattedDate date={new Date(medicament.expirationDate)} /></Td>
                     <Td>
                       <Flex justify={'end'}>
                         <Tooltip label='Editar' fontSize='md' placement='top'>
