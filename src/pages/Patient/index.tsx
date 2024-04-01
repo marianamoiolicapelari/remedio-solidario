@@ -40,7 +40,7 @@ const Patient = () => {
     cpf: Yup.string().required('CPF é obrigatório').test('cpf', 'CPF inválido', validateCPF),
     fullName: Yup.string().required('Nome é obrigatório').matches(/^[^\d]+$/, 'Nome não pode conter números'),
     address: Yup.string().required('Endereço é obrigatório'),
-  });
+  })
 
   const handleSubmitForm = async (values: FormData, { resetForm }: FormikHelpers<FormData>) => {
     // const formData = new FormData()
