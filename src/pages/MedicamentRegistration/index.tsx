@@ -39,15 +39,15 @@ const MedicamentRegistration = () => {
 
   // Função para lidar com a mudança de página
   const handlePageChange = (pageNumber: number) => {
-    setCurrentPage(pageNumber);
-  };
+    setCurrentPage(pageNumber)
+  }
 
   // Função para obter os pacientes da página atual
   const getCurrentMedicaments = () => {
-    const indexOfLastMedicament = currentPage * medicamentsPerPage;
-    const indexOfFirstMedicament = indexOfLastMedicament - medicamentsPerPage;
-    return medicaments.slice(indexOfFirstMedicament, indexOfLastMedicament);
-  };
+    const indexOfLastMedicament = currentPage * medicamentsPerPage
+    const indexOfFirstMedicament = indexOfLastMedicament - medicamentsPerPage
+    return medicaments.slice(indexOfFirstMedicament, indexOfLastMedicament)
+  }
 
   const handleEditMedicament = (medicament: FormData) => {
     setSelectedMedicament(medicament)
