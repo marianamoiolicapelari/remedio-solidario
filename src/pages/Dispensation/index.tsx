@@ -12,13 +12,15 @@ interface FormData {
 }
 
 interface FormMedicaments {
+  id: string
   medicament: string
   quantity: number
 }
 
 const Dispensation = () => {
   const [patients, setPatients] = useState<FormData[]>([])
-  const [medicaments, setMedicaments] = useState<FormMedicaments[]>([])
+  const [medicaments, setMedicaments] = useState('')
+  const [itemList, setItemList] = useState<FormMedicaments[]>([])
 
   const actualDate = Date()
 
@@ -40,22 +42,25 @@ const Dispensation = () => {
     fetchData()
   }, [])
 
-  useEffect(() => {
-    const getMedicaments = async () => {
-      try {
-        const response = await api.get('/medicaments')
-        setMedicaments(response.data)
-        console.log('MOSTRA_MEDICAMENTOS', response)
-      } catch (error) {
-        console.error('Erro ao buscar medicamentos:', error)
-      }
+  function handleAddMedicaments(event: { preventDefault: () => void }) {
+    event.preventDefault()
+
+    async function getMedicaments() {
+      const response = await api.get(`/medicaments?medicament=${medicaments}`)
+      console.log('RESPOSTA_MEDICAMENTOS', response)
+      const { id, medicament, quantity } = response.data[0]
+      
+
+      setItemList(prevItems =>
+        [...prevItems,
+          {
+            'id': id,
+            'medicament': medicament,
+            'quantity': quantity
+          }
+        ])
     }
-
     getMedicaments()
-  }, [])
-
-  function handleAddMedicaments() {
-
   }
 
   const handleSubmitForm = async (values: FormData, { resetForm }: FormikHelpers<FormData>) => {
@@ -117,11 +122,28 @@ const Dispensation = () => {
                 {errors.fullName && touched.fullName && <Text color='#ff0000' fontSize={14} fontWeight='500' pl={1}>{errors.fullName}</Text>}
               </FormControl>
 
-              <Flex>
-                <FormControl mt={5}>
+              <Flex mt={5} gap={6} w='92%'>
+                <FormControl>
                   <FormLabel htmlFor="medicament" color='#808080'>Buscar medicamento</FormLabel>
-                  <Input id='medicament' type="text" name="medicament" w='70%' placeholder="Digite o nome do medicamento" />
-                  <Button type="submit" name="adicionar" ml='6' onClick={handleAddMedicaments}>Adicionar</Button>
+                  <Input
+                    id='medicament'
+                    type="text"
+                    name="medicament"
+                    placeholder="Digite o nome do medicamento"
+                    onChange={e => setMedicaments(e.target.value)}
+                  />
+                </FormControl>
+                <FormControl>
+                  <FormLabel htmlFor="quantity" color='#808080'>Quantidade</FormLabel>
+                  <Input
+                    id='quantity'
+                    type="number"
+                    name="quantity"
+                    placeholder="Quantidade"            
+                  />
+                </FormControl>
+                <FormControl display='flex' alignItems='flex-end'>
+                  <Button type="submit" name="adicionar" onClick={handleAddMedicaments}>Adicionar</Button>
                 </FormControl>
               </Flex>
 
@@ -136,10 +158,10 @@ const Dispensation = () => {
                       </Tr>
                     </Thead>
                     <Tbody>
-                      {medicaments.map(_medicament => (
-                        <Tr>
-                          <Td>JUJUBA</Td>
-                          <Td><Button>-</Button> 10 <Button>+</Button></Td>
+                      {itemList.map(item => (
+                        <Tr key={item.id}>
+                          <Td>{item.medicament}</Td>
+                          <Td>{item.quantity}</Td>
                           <Td>
                             <Flex justify={'end'}>
                               <Tooltip label='Excluir' fontSize='md' placement='top'>
