@@ -2,11 +2,18 @@ import { Box, Flex, FormControl, FormLabel, Input, Select, Text, Table, Thead, T
 import { Formik, Form, FormikHelpers } from 'formik'
 import { Footer, Header } from '../../components'
 import { MdDeleteOutline } from 'react-icons/md'
-// import { toast } from 'react-toastify'
+import { toast } from 'react-toastify'
 import { api } from '../../services/api'
 import { useEffect, useState } from 'react'
 
 interface FormData {
+  date: string
+  patient: string
+  medicament: string
+  quantityInitial: number
+}
+
+interface FormPatients {
   id: string
   fullName: string
 }
@@ -18,16 +25,25 @@ interface FormMedicaments {
 }
 
 const Dispensation = () => {
-  const [patients, setPatients] = useState<FormData[]>([])
+  const [actualDate, setActualDate] = useState('')
+  const [patients, setPatients] = useState<FormPatients[]>([])
   const [medicaments, setMedicaments] = useState('')
   const [itemList, setItemList] = useState<FormMedicaments[]>([])
 
-  const actualDate = Date()
-
   const initialValues: FormData = {
-    id: '',
-    fullName: ''
+    date: '',
+    patient: '',
+    medicament: '',
+    quantityInitial: 0
   }
+
+  useEffect(() => {
+    const currentDate = new Date()
+    const options: Intl.DateTimeFormatOptions = { weekday: 'long', year: 'numeric', month: 'long', day: '2-digit' }
+    const formattedDate = currentDate.toLocaleDateString('pt-BR', options)
+    const capitalizedWeekday = formattedDate.charAt(0).toUpperCase() + formattedDate.slice(1)
+    setActualDate(capitalizedWeekday)
+  }, [])
 
   useEffect(() => {
     const fetchData = async () => {
@@ -49,7 +65,7 @@ const Dispensation = () => {
       const response = await api.get(`/medicaments?medicament=${medicaments}`)
       console.log('RESPOSTA_MEDICAMENTOS', response)
       const { id, medicament, quantity } = response.data[0]
-      
+
 
       setItemList(prevItems =>
         [...prevItems,
@@ -64,10 +80,7 @@ const Dispensation = () => {
   }
 
   const handleSubmitForm = async (values: FormData, { resetForm }: FormikHelpers<FormData>) => {
-    // const formData = new FormData()
-    // formData.append('cpf', values.cpf)
-    // formData.append('fullName', values.fullName)
-    // formData.append('address', values.address)
+    console.log('INPUT', values.quantityInitial)
 
     try {
       const { status } = await api.post('/dispensation', values, {
@@ -77,15 +90,16 @@ const Dispensation = () => {
       })
 
       if (status === 201 || status === 200) {
-        // toast.success('Medicamento cadastrado com sucesso!')
+        toast.success('Enviado com sucesso!')
+        console.log('DADOS_ENVIADOS', values)
         resetForm()
       }
       if (status === 409) {
-        // toast.error('Medicamento já cadastrado')
+        toast.error('Envie novamente')
       }
 
     } catch (err) {
-      // toast.error('Falha no sistema! Tente novamente')
+      toast.error('Falha no sistema! Tente novamente')
     }
   }
 
@@ -96,16 +110,19 @@ const Dispensation = () => {
         height='calc(100vh - 115px)'
         p={8}
       >
-        <Flex alignItems='center' justify='space-between'>
-          <Text fontWeight="bold" fontSize='xl'>Dispensação de Medicamentos</Text>
-          <Text>{actualDate}</Text>
-        </Flex>
         <Formik
           initialValues={initialValues}
           onSubmit={handleSubmitForm}
         >
-          {({ errors, touched }) => (
+          {({ setFieldValue }) => (
             <Form>
+              <Flex alignItems='center' justify='space-between'>
+                <Text fontWeight="bold" fontSize='xl'>Dispensação de Medicamentos</Text>
+                <Input
+                  name="actualDate"
+                  value={actualDate}    
+                />
+              </Flex>
               <FormControl mt={7} h='80px'>
                 <FormLabel htmlFor='patient' color='#808080'>Paciente</FormLabel>
                 <Select
@@ -114,12 +131,14 @@ const Dispensation = () => {
                   placeholder='Selecione o nome do paciente'
                   w='70%'
                   autoFocus
+                  onChange={e => {
+                    setFieldValue('patient', e.target.value)
+                  }}
                 >
                   {patients && patients.map(patient => (
-                    <option key={patient.id} value={patient.id}>{patient.fullName}</option>
+                    <option key={patient.id} value={patient.fullName}>{patient.fullName}</option>
                   ))}
                 </Select>
-                {errors.fullName && touched.fullName && <Text color='#ff0000' fontSize={14} fontWeight='500' pl={1}>{errors.fullName}</Text>}
               </FormControl>
 
               <Flex mt={5} gap={6} w='92%'>
@@ -130,16 +149,22 @@ const Dispensation = () => {
                     type="text"
                     name="medicament"
                     placeholder="Digite o nome do medicamento"
-                    onChange={e => setMedicaments(e.target.value)}
+                    onChange={e => {
+                      setMedicaments(e.target.value)
+                      setFieldValue('medicament', e.target.value)
+                    }}
                   />
                 </FormControl>
                 <FormControl>
-                  <FormLabel htmlFor="quantity" color='#808080'>Quantidade</FormLabel>
+                  <FormLabel htmlFor="quantityInitial" color='#808080'>Quantidade</FormLabel>
                   <Input
-                    id='quantity'
+                    id='quantityInitial'
                     type="number"
-                    name="quantity"
-                    placeholder="Quantidade"            
+                    name="quantityInitial"
+                    placeholder="Quantidade"
+                    onChange={e => {
+                      setFieldValue('quantityInitial', e.target.value)
+                    }}
                   />
                 </FormControl>
                 <FormControl display='flex' alignItems='flex-end'>

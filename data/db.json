@@ -194,5 +194,70 @@
       "quantity": "20",
       "expirationDate": "2024-04-06"
     }
+  ],
+  "dispensation": [
+    {
+      "id": "c644",
+      "date": "",
+      "patient": "",
+      "medicament": "",
+      "quantity": ""
+    },
+    {
+      "id": "ff4a",
+      "date": "",
+      "patient": "",
+      "medicament": "",
+      "quantityInitial": ""
+    },
+    {
+      "id": "5d8e",
+      "date": "",
+      "patient": "",
+      "medicament": "",
+      "quantityInitial": ""
+    },
+    {
+      "id": "a529",
+      "date": "",
+      "patient": "",
+      "medicament": "Amoxicilina",
+      "quantityInitial": ""
+    },
+    {
+      "id": "ed8b",
+      "date": "",
+      "patient": "1",
+      "medicament": "Amoxicilina",
+      "quantityInitial": "10"
+    },
+    {
+      "id": "2696",
+      "date": "",
+      "patient": "",
+      "medicament": "",
+      "quantityInitial": ""
+    },
+    {
+      "id": "2541",
+      "date": "",
+      "patient": "Antônio Pereira da Silva",
+      "medicament": "Amoxicilina",
+      "quantityInitial": "10"
+    },
+    {
+      "id": "affb",
+      "date": "",
+      "patient": "Antônio Pereira da Silva",
+      "medicament": "Amoxicilina",
+      "quantityInitial": "4"
+    },
+    {
+      "id": "2f91",
+      "date": "",
+      "patient": "Joana da Silva Santos",
+      "medicament": "Amoxicilina",
+      "quantityInitial": "2"
+    }
   ]
 }
