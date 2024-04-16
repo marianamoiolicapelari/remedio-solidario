@@ -1,6 +1,6 @@
 import { Box, Flex, FormControl, FormLabel, Input, Select, Text, Table, Thead, Tbody, Tr, Th, Td, TableContainer, Button, Tooltip } from '@chakra-ui/react'
 import { Formik, Form, FormikHelpers } from 'formik'
-import { Footer, Header } from '../../components'
+import { Footer, Header, MultSelect } from '../../components'
 import { MdDeleteOutline } from 'react-icons/md'
 import { toast } from 'react-toastify'
 import { api } from '../../services/api'
@@ -25,28 +25,31 @@ interface FormMedicaments {
 }
 
 const Dispensation = () => {
-  const [actualDate, setActualDate] = useState('')
+  // const [actualDate, setActualDate] = useState('')
   const [patients, setPatients] = useState<FormPatients[]>([])
-  const [medicaments, setMedicaments] = useState('')
+  const [medicaments, _setMedicaments] = useState('')
   const [itemList, setItemList] = useState<FormMedicaments[]>([])
 
   const initialValues: FormData = {
-    date: '',
+    date: getFormattedDate(),
     patient: '',
     medicament: '',
     quantityInitial: 0
   }
 
-  useEffect(() => {
+  function getFormattedDate() {
     const currentDate = new Date()
-    const options: Intl.DateTimeFormatOptions = { weekday: 'long', year: 'numeric', month: 'long', day: '2-digit' }
-    const formattedDate = currentDate.toLocaleDateString('pt-BR', options)
-    const capitalizedWeekday = formattedDate.charAt(0).toUpperCase() + formattedDate.slice(1)
-    setActualDate(capitalizedWeekday)
-  }, [])
+    const formattedDate = currentDate.toLocaleDateString('pt-BR', {
+      weekday: 'long',
+      year: 'numeric',
+      month: 'long',
+      day: '2-digit'
+    })
+    return formattedDate.charAt(0).toUpperCase() + formattedDate.slice(1)
+  }
 
   useEffect(() => {
-    const fetchData = async () => {
+    const fetchPatients = async () => {
       try {
         const response = await api.get('/patients')
         setPatients(response.data)
@@ -54,30 +57,41 @@ const Dispensation = () => {
         console.error('Erro ao buscar pacientes:', error)
       }
     }
-
-    fetchData()
+    fetchPatients() 
   }, [])
+
+  useEffect(() => {
+    const fetchMedicaments = async () => {
+      try {
+        const response = await api.get(`/medicaments?medicament=${medicaments}`)
+        const medicamentsData = response.data// Aqui estão os dados dos medicamentos retornados pela API
+        setItemList(medicamentsData) // Atualiza o estado itemList com os medicamentos retornados pela API
+        console.log('RESPOSTA_MEDICAMENTOS', medicamentsData)
+      } catch (error) {
+        console.error('Erro ao buscar medicamentos:', error)     
+      }
+    }
+    fetchMedicaments() 
+  }, [medicaments])
 
   function handleAddMedicaments(event: { preventDefault: () => void }) {
     event.preventDefault()
-
-    async function getMedicaments() {
-      const response = await api.get(`/medicaments?medicament=${medicaments}`)
-      console.log('RESPOSTA_MEDICAMENTOS', response)
-      const { id, medicament, quantity } = response.data[0]
-
-
-      setItemList(prevItems =>
-        [...prevItems,
-          {
-            'id': id,
-            'medicament': medicament,
-            'quantity': quantity
-          }
-        ])
-    }
-    getMedicaments()
+    // async function getMedicaments() {
+    //   try {
+    //     const response = await api.get(`/medicaments?medicament=${medicaments}`)
+    //     const medicamentsData = response.data// Aqui estão os dados dos medicamentos retornados pela API
+    //     setItemList(medicamentsData) // Atualiza o estado itemList com os medicamentos retornados pela API
+    //     console.log('RESPOSTA_MEDICAMENTOS', medicamentsData)
+    //   } catch (error) {
+    //     console.error('Erro ao buscar medicamentos:', error)     
+    //   }
+    // }
+  
+    // getMedicaments()
+  
   }
+
+ 
 
   const handleSubmitForm = async (values: FormData, { resetForm }: FormikHelpers<FormData>) => {
     console.log('INPUT', values.quantityInitial)
@@ -114,14 +128,20 @@ const Dispensation = () => {
           initialValues={initialValues}
           onSubmit={handleSubmitForm}
         >
-          {({ setFieldValue }) => (
+          {({ values, setFieldValue }) => (
             <Form>
               <Flex alignItems='center' justify='space-between'>
-                <Text fontWeight="bold" fontSize='xl'>Dispensação de Medicamentos</Text>
-                <Input
-                  name="actualDate"
-                  value={actualDate}    
-                />
+                <Text fontWeight='bold' fontSize='xl'>Dispensação de Medicamentos</Text>
+                <FormControl w='250px'>
+                  <Input
+                    name='date'
+                    variant='unstyled'
+                    value={values.date}
+                    onChange={e => {
+                      setFieldValue('date', e.target.value)
+                    }}
+                  />
+                </FormControl>
               </Flex>
               <FormControl mt={7} h='80px'>
                 <FormLabel htmlFor='patient' color='#808080'>Paciente</FormLabel>
@@ -129,7 +149,7 @@ const Dispensation = () => {
                   id='patient'
                   name='patient'
                   placeholder='Selecione o nome do paciente'
-                  w='70%'
+                  w='73%'
                   autoFocus
                   onChange={e => {
                     setFieldValue('patient', e.target.value)
@@ -143,8 +163,8 @@ const Dispensation = () => {
 
               <Flex mt={5} gap={6} w='92%'>
                 <FormControl>
-                  <FormLabel htmlFor="medicament" color='#808080'>Buscar medicamento</FormLabel>
-                  <Input
+                  <FormLabel htmlFor="medicament" color='#808080'>Digite o nome do medicamento</FormLabel>
+                  {/* <Input
                     id='medicament'
                     type="text"
                     name="medicament"
@@ -153,7 +173,11 @@ const Dispensation = () => {
                       setMedicaments(e.target.value)
                       setFieldValue('medicament', e.target.value)
                     }}
+                  /> */}
+                  <MultSelect
+                    options={itemList.map(item => item.medicament)}                  
                   />
+
                 </FormControl>
                 <FormControl>
                   <FormLabel htmlFor="quantityInitial" color='#808080'>Quantidade</FormLabel>
@@ -172,33 +196,35 @@ const Dispensation = () => {
                 </FormControl>
               </Flex>
 
-              <Box height="35vh" overflowY="auto" mt={7}>
+              <Box height="20vh" overflowY="auto" mt={7}>
                 <TableContainer>
                   <Table variant='simple' size='sm' colorScheme='blue'>
                     <Thead>
                       <Tr>
                         <Th>Nome Medicamento</Th>
                         <Th>Quantidade</Th>
+                        <Th>Estoque</Th>
                         <Th></Th>
                       </Tr>
                     </Thead>
                     <Tbody>
-                      {itemList.map(item => (
-                        <Tr key={item.id}>
-                          <Td>{item.medicament}</Td>
-                          <Td>{item.quantity}</Td>
-                          <Td>
-                            <Flex justify={'end'}>
-                              <Tooltip label='Excluir' fontSize='md' placement='top'>
-                                {/* <Button mr={2} onClick={() => handleDeleteMedicament(medicament.id)}> */}
-                                <Button>
-                                  <MdDeleteOutline />
-                                </Button>
-                              </Tooltip>
-                            </Flex>
-                          </Td>
-                        </Tr>
-                      ))}
+                  
+                      <Tr>
+                        <Td>Dipirona</Td>
+                        <Td>2</Td>
+                        <Td>50</Td>
+                        <Td>
+                          <Flex justify={'end'}>
+                            <Tooltip label='Excluir' fontSize='md' placement='top'>
+                              {/* <Button mr={2} onClick={() => handleDeleteMedicament(medicament.id)}> */}
+                              <Button>
+                                <MdDeleteOutline />
+                              </Button>
+                            </Tooltip>
+                          </Flex>
+                        </Td>
+                      </Tr>
+                      
                     </Tbody>
                   </Table>
                 </TableContainer>
