@@ -8,26 +8,23 @@ import FormattedDate from '../../common/FormattedDate'
 
 interface FormData {
   id: string
-  medicament: string
-  quantity: string
-  expirationDate: string
+  formula: string
+  quantidade: string
+  vencimento: string
 }
 
 const MedicamentRegistration = () => {
   const [medicaments, setMedicaments] = useState<FormData[]>([])
   const [isEditModalOpen, setIsEditModalOpen] = useState(false)
-  const [selectedMedicament, setSelectedMedicament] = useState<FormData | null>(null)
+  const [_selectedMedicament, setSelectedMedicament] = useState<FormData | null>(null)
   const [editedMedicament, setEditedMedicament] = useState<FormData | null>(null)
   const [currentPage, setCurrentPage] = useState(1)
   const [medicamentsPerPage] = useState(5)
 
-
-  console.log(selectedMedicament)
-
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await api.get('/medicaments')
+        const response = await api.get('/medicamento')
         setMedicaments(response.data)
       } catch (error) {
         console.error('Erro ao buscar medicamentos:', error)
@@ -37,12 +34,10 @@ const MedicamentRegistration = () => {
     fetchData()
   }, [])
 
-  // Função para lidar com a mudança de página
   const handlePageChange = (pageNumber: number) => {
     setCurrentPage(pageNumber)
   }
 
-  // Função para obter os pacientes da página atual
   const getCurrentMedicaments = () => {
     const indexOfLastMedicament = currentPage * medicamentsPerPage
     const indexOfFirstMedicament = indexOfLastMedicament - medicamentsPerPage
@@ -63,9 +58,8 @@ const MedicamentRegistration = () => {
 
   const handleDeleteMedicament = async (id: string) => {
     try {
-      await api.delete(`/medicaments/${id}`)
-      setMedicaments(medicaments.filter(medicament => medicament.id !== id))
-      console.log(medicaments)
+      await api.delete(`/medicamento/${id}`)
+      setMedicaments(medicaments.filter(medicament => medicament.id !== id))      
     } catch (error) {
       console.error('Erro ao excluir paciente:', error)
     }
@@ -85,7 +79,7 @@ const MedicamentRegistration = () => {
   const handleSubmit = async () => {
     if (editedMedicament) {
       try {
-        await api.put(`/medicaments/${editedMedicament.id}`, editedMedicament)
+        await api.put(`/medicamento/${editedMedicament.id}`, editedMedicament)
         setMedicaments(medicaments.map(medicament => (medicament.id === editedMedicament.id ? editedMedicament : medicament)))
         setIsEditModalOpen(false)
         setSelectedMedicament(null)
@@ -116,9 +110,9 @@ const MedicamentRegistration = () => {
               <Tbody>
                 {getCurrentMedicaments().map(medicament => (
                   <Tr key={medicament.id} >
-                    <Td w='50%'>{medicament.medicament}</Td>
-                    <Td w='20%'>{medicament.quantity}</Td>
-                    <Td w='20%'><FormattedDate date={new Date(medicament.expirationDate)} /></Td>
+                    <Td w='50%'>{medicament.formula}</Td>
+                    <Td w='20%'>{medicament.quantidade}</Td>
+                    <Td w='20%'><FormattedDate date={new Date(medicament.vencimento)} /></Td>
                     <Td>
                       <Flex justify={'end'}>
                         <Tooltip label='Editar' fontSize='md' placement='top'>
@@ -157,15 +151,15 @@ const MedicamentRegistration = () => {
         <Box as="form" >
           <FormControl>
             <FormLabel>CPF</FormLabel>
-            <Input type="text" name="medicament" value={editedMedicament?.medicament} onChange={handleInputChange} />
+            <Input type="text" name="formula" value={editedMedicament?.formula} onChange={handleInputChange} />
           </FormControl>
           <FormControl>
             <FormLabel mt={4}>Nome do Paciente</FormLabel>
-            <Input type="text" name="quantity" value={editedMedicament?.quantity} onChange={handleInputChange} />
+            <Input type="text" name="quantidade" value={editedMedicament?.quantidade} onChange={handleInputChange} />
           </FormControl>
           <FormControl>
             <FormLabel mt={4}>Endereço</FormLabel>
-            <Input type="text" name="expirationDate" value={editedMedicament?.expirationDate} onChange={handleInputChange} />
+            <Input type="text" name="vencimento" value={editedMedicament?.vencimento} onChange={handleInputChange} />
           </FormControl>
         </Box>
       </BaseModal>

@@ -7,8 +7,8 @@ import { toast } from 'react-toastify'
 
 interface FormData {
   cpf: string
-  fullName: string
-  address: string
+  nome: string
+  endereco: string
 }
 
 const maskCPF = (value: string) => {
@@ -32,24 +32,20 @@ const validateCPF = (cpf: string) => {
 const Patient = () => {
   const initialValues: FormData = {
     cpf: '',
-    fullName: '',
-    address: ''
+    nome: '',
+    endereco: ''
   }
 
   const validationSchema = Yup.object({
     cpf: Yup.string().required('CPF é obrigatório').test('cpf', 'CPF inválido', validateCPF),
-    fullName: Yup.string().required('Nome é obrigatório').matches(/^[^\d]+$/, 'Nome não pode conter números'),
-    address: Yup.string().required('Endereço é obrigatório'),
+    nome: Yup.string().required('Nome é obrigatório').matches(/^[^\d]+$/, 'Nome não pode conter números'),
+    endereco: Yup.string().required('Endereço é obrigatório'),
   })
 
   const handleSubmitForm = async (values: FormData, { resetForm }: FormikHelpers<FormData>) => {
-    // const formData = new FormData()
-    // formData.append('cpf', values.cpf)
-    // formData.append('fullName', values.fullName)
-    // formData.append('address', values.address)
 
     try {
-      const { status } = await api.post('/patients', values, {
+      const { status } = await api.post('/paciente', values, {
         headers: {
           'Content-Type': 'application/json'
         }
@@ -104,15 +100,15 @@ const Patient = () => {
               </FormControl>
 
               <FormControl mt={7} h='80px'>
-                <FormLabel htmlFor='fullName' color='#808080'>Nome do paciente</FormLabel>
-                <Field as={Input} id='fullName' name='fullName' type='text' placeholder='Digite o nome completo' />
-                {errors.fullName && touched.fullName && <Text color='#ff0000' fontSize={14} fontWeight='500' pl={1}>{errors.fullName}</Text>}
+                <FormLabel htmlFor='nome' color='#808080'>Nome do paciente</FormLabel>
+                <Field as={Input} id='nome' name='nome' type='text' placeholder='Digite o nome completo' />
+                {errors.nome && touched.nome && <Text color='#ff0000' fontSize={14} fontWeight='500' pl={1}>{errors.nome}</Text>}
               </FormControl>
 
               <FormControl mt={7} h='80px'>
                 <FormLabel htmlFor='address' color='#808080'>Endereço do paciente</FormLabel>
-                <Field as={Input} id='address' name='address' type='text' placeholder='Digite o endereço completo' />
-                {errors.address && touched.address && <Text color='#ff0000' fontSize={14} fontWeight='500' pl={1}>{errors.address}</Text>}
+                <Field as={Input} id='endereco' name='endereco' type='text' placeholder='Digite o endereço completo' />
+                {errors.endereco && touched.endereco && <Text color='#ff0000' fontSize={14} fontWeight='500' pl={1}>{errors.endereco}</Text>}
               </FormControl>
 
               <Flex justify={'flex-end'}>

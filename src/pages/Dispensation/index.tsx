@@ -7,34 +7,33 @@ import { api } from '../../services/api'
 import { useEffect, useState } from 'react'
 
 interface FormData {
-  date: string
-  patient: string
-  medicament: string
-  quantityInitial: number
+  data: string
+  paciente: string
+  formula: string
+  quantidade: number
 }
 
 interface FormPatients {
   id: string
-  fullName: string
+  nome: string
 }
 
 interface FormMedicaments {
   id: string
-  medicament: string
-  quantity: number
+  medicamento: string
+  quantidade: number
 }
 
 const Dispensation = () => {
-  // const [actualDate, setActualDate] = useState('')
   const [patients, setPatients] = useState<FormPatients[]>([])
-  const [medicaments, _setMedicaments] = useState('')
+  const [medicaments, setMedicaments] = useState('')
   const [itemList, setItemList] = useState<FormMedicaments[]>([])
 
   const initialValues: FormData = {
-    date: getFormattedDate(),
-    patient: '',
-    medicament: '',
-    quantityInitial: 0
+    data: getFormattedDate(),
+    paciente: '',
+    formula: '',
+    quantidade: 0
   }
 
   function getFormattedDate() {
@@ -51,7 +50,7 @@ const Dispensation = () => {
   useEffect(() => {
     const fetchPatients = async () => {
       try {
-        const response = await api.get('/patients')
+        const response = await api.get('/paciente')
         setPatients(response.data)
       } catch (error) {
         console.error('Erro ao buscar pacientes:', error)
@@ -63,9 +62,9 @@ const Dispensation = () => {
   useEffect(() => {
     const fetchMedicaments = async () => {
       try {
-        const response = await api.get(`/medicaments?medicament=${medicaments}`)
-        const medicamentsData = response.data// Aqui estão os dados dos medicamentos retornados pela API
-        setItemList(medicamentsData) // Atualiza o estado itemList com os medicamentos retornados pela API
+        const response = await api.get(`/medicamento?medicament=${medicamento}`)
+        const medicamentsData = response.data
+        setItemList(medicamentsData)
         console.log('RESPOSTA_MEDICAMENTOS', medicamentsData)
       } catch (error) {
         console.error('Erro ao buscar medicamentos:', error)     
@@ -76,25 +75,12 @@ const Dispensation = () => {
 
   function handleAddMedicaments(event: { preventDefault: () => void }) {
     event.preventDefault()
-    // async function getMedicaments() {
-    //   try {
-    //     const response = await api.get(`/medicaments?medicament=${medicaments}`)
-    //     const medicamentsData = response.data// Aqui estão os dados dos medicamentos retornados pela API
-    //     setItemList(medicamentsData) // Atualiza o estado itemList com os medicamentos retornados pela API
-    //     console.log('RESPOSTA_MEDICAMENTOS', medicamentsData)
-    //   } catch (error) {
-    //     console.error('Erro ao buscar medicamentos:', error)     
-    //   }
-    // }
-  
-    // getMedicaments()
-  
-  }
 
- 
+  
+  } 
 
   const handleSubmitForm = async (values: FormData, { resetForm }: FormikHelpers<FormData>) => {
-    console.log('INPUT', values.quantityInitial)
+    console.log('INPUT', values.quantidade)
 
     try {
       const { status } = await api.post('/dispensation', values, {
@@ -136,7 +122,7 @@ const Dispensation = () => {
                   <Input
                     name='date'
                     variant='unstyled'
-                    value={values.date}
+                    value={values.data}
                     onChange={e => {
                       setFieldValue('date', e.target.value)
                     }}
@@ -156,14 +142,14 @@ const Dispensation = () => {
                   }}
                 >
                   {patients && patients.map(patient => (
-                    <option key={patient.id} value={patient.fullName}>{patient.fullName}</option>
+                    <option key={patient.id} value={patient.nome}>{patient.nome}</option>
                   ))}
                 </Select>
               </FormControl>
 
               <Flex mt={5} gap={6} w='92%'>
                 <FormControl>
-                  <FormLabel htmlFor="medicament" color='#808080'>Digite o nome do medicamento</FormLabel>
+                  <FormLabel htmlFor="medicamento" color='#808080'>Digite o nome do medicamento</FormLabel>
                   {/* <Input
                     id='medicament'
                     type="text"
@@ -175,19 +161,22 @@ const Dispensation = () => {
                     }}
                   /> */}
                   <MultSelect
-                    options={itemList.map(item => item.medicament)}                  
+                    options={itemList.map(item => item.medicamento)}    
+                    onChange={selectedOptions => {
+                      setFieldValue('medicament', selectedOptions)
+                    }}           
                   />
 
                 </FormControl>
                 <FormControl>
-                  <FormLabel htmlFor="quantityInitial" color='#808080'>Quantidade</FormLabel>
+                  <FormLabel htmlFor="quantidade" color='#808080'>Quantidade</FormLabel>
                   <Input
-                    id='quantityInitial'
+                    id='quantidade'
                     type="number"
-                    name="quantityInitial"
+                    name="quantidade"
                     placeholder="Quantidade"
                     onChange={e => {
-                      setFieldValue('quantityInitial', e.target.value)
+                      setFieldValue('quantityMedicament', e.target.value)
                     }}
                   />
                 </FormControl>

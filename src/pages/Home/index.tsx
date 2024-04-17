@@ -3,7 +3,7 @@ import React, { useState } from 'react'
 import { IoIosArrowDown } from "react-icons/io"
 import { Box, Flex, Image, List, UnorderedList } from '@chakra-ui/react'
 
-import { ItemsMenu } from '../../common/ItemsMenu'
+import { MenuItems } from '../../common/MenuItems'
 
 import Logo from '../../assets/logo.png'
 
@@ -12,7 +12,7 @@ interface HomeProps { }
 const Home: React.FC<HomeProps> = () => {
 
   const [submenuOpen, setSubmenuOpen] = useState<{ [key: number]: boolean }>(
-    ItemsMenu.reduce((acc, _, index) => ({ ...acc, [index]: false }), {})
+    MenuItems.reduce((acc, _, index) => ({ ...acc, [index]: false }), {})
   )
 
   const toggleSubmenu = (index: number) => {
@@ -43,7 +43,7 @@ const Home: React.FC<HomeProps> = () => {
 
         <Flex mt={10}>
           <UnorderedList ml={3}>
-            {ItemsMenu.map((menu, index) => (
+            {MenuItems.map((menu, index) => (
               <React.Fragment key={index}>
                 <Flex
                   align='center'
@@ -53,6 +53,7 @@ const Home: React.FC<HomeProps> = () => {
                   p={2}
                   cursor='pointer'
                   _hover={{ backgroundColor: 'whiteAlpha.800', color: '#247ba0', borderRadius: '8' }}
+                  onClick={() => toggleSubmenu(index)}
                 >
                   <Flex align='center' gap={4}>
                     <Box
@@ -61,16 +62,14 @@ const Home: React.FC<HomeProps> = () => {
                       {menu.icon ? menu.icon : ''}
                     </Box>
                     <Box
-                      fontSize={20}
-                      onClick={() => toggleSubmenu(index)}
+                      fontSize={20}                
                     >
                       {menu.title}
                     </Box>
                   </Flex>
                   {menu.submenu && (
                     <IoIosArrowDown
-                      style={{ transform: submenuOpen[index] ? "rotate(180deg)" : "" }}
-                      onClick={() => toggleSubmenu(index)}
+                      style={{ transform: submenuOpen[index] ? "rotate(180deg)" : "" }}               
                     />
                   )}
                 </Flex>

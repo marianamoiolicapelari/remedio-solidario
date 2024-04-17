@@ -8,8 +8,8 @@ import { toast } from 'react-toastify'
 interface FormData {
   id: string
   cpf: string
-  fullName: string
-  address: string
+  nome: string
+  endereco: string
 }
 
 const PatientRegistration = () => {
@@ -18,7 +18,7 @@ const PatientRegistration = () => {
   const [selectedPatient, setSelectedPatient] = useState<FormData | null>(null)
   const [editedPatient, setEditedPatient] = useState<FormData | null>(null)
   const [currentPage, setCurrentPage] = useState(1)
-  const [patientsPerPage] = useState(5) // Defina o número de pacientes por página
+  const [patientsPerPage] = useState(5) 
 
 
   console.log(selectedPatient)
@@ -26,7 +26,7 @@ const PatientRegistration = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await api.get('/patients')
+        const response = await api.get('/paciente')
         setPatients(response.data)
       } catch (error) {
         console.error('Erro ao buscar pacientes:', error)
@@ -36,17 +36,15 @@ const PatientRegistration = () => {
     fetchData()
   }, [])
 
-  // Função para lidar com a mudança de página
   const handlePageChange = (pageNumber: number) => {
-    setCurrentPage(pageNumber);
-  };
+    setCurrentPage(pageNumber)
+  }
 
-  // Função para obter os pacientes da página atual
   const getCurrentPatients = () => {
-    const indexOfLastPatient = currentPage * patientsPerPage;
-    const indexOfFirstPatient = indexOfLastPatient - patientsPerPage;
-    return patients.slice(indexOfFirstPatient, indexOfLastPatient);
-  };
+    const indexOfLastPatient = currentPage * patientsPerPage
+    const indexOfFirstPatient = indexOfLastPatient - patientsPerPage
+    return patients.slice(indexOfFirstPatient, indexOfLastPatient)
+  }
 
   const handleEditPatient = (patient: FormData) => {
     setSelectedPatient(patient)
@@ -62,7 +60,7 @@ const PatientRegistration = () => {
 
   const handleDeletePatient = async (id: string) => {
     try {
-      await api.delete(`/patients/${id}`)
+      await api.delete(`/paciente/${id}`)
       setPatients(patients.filter(patient => patient.id !== id))
       console.log(patients)
     } catch (error) {
@@ -84,7 +82,7 @@ const PatientRegistration = () => {
   const handleSubmit = async () => {
     if (editedPatient) {
       try {
-        await api.put(`/patients/${editedPatient.id}`, editedPatient)
+        await api.put(`/paciente/${editedPatient.id}`, editedPatient)
         setPatients(patients.map(patient => (patient.id === editedPatient.id ? editedPatient : patient)))
         setIsEditModalOpen(false)
         setSelectedPatient(null)
@@ -116,8 +114,8 @@ const PatientRegistration = () => {
                 {getCurrentPatients().map(patient => (
                   <Tr key={patient.id} >
                     <Td w='10%'>{patient.cpf}</Td>
-                    <Td >{patient.fullName}</Td>
-                    <Td >{patient.address}</Td>
+                    <Td >{patient.nome}</Td>
+                    <Td >{patient.endereco}</Td>
                     <Td>
                       <Flex justify={'end'}>
                         <Tooltip label='Editar' fontSize='md' placement='top'>
@@ -160,11 +158,11 @@ const PatientRegistration = () => {
           </FormControl>
           <FormControl>
             <FormLabel mt={4}>Nome do Paciente</FormLabel>
-            <Input type="text" name="fullName" value={editedPatient?.fullName} onChange={handleInputChange} />
+            <Input type="text" name="nome" value={editedPatient?.nome} onChange={handleInputChange} />
           </FormControl>
           <FormControl>
             <FormLabel mt={4}>Endereço</FormLabel>
-            <Input type="text" name="address" value={editedPatient?.address} onChange={handleInputChange} />
+            <Input type="text" name="endereco" value={editedPatient?.endereco} onChange={handleInputChange} />
           </FormControl>
         </Box>
       </BaseModal>

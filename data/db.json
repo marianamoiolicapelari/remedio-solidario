@@ -1,221 +1,87 @@
 {
-  "patients": [
+  "paciente": [
     {
       "id": "1",
       "cpf": "789.456.123-87",
-      "fullName": "Antônio Pereira da Silva",
-      "address": "Rua das Orquideas, 52 - Centro"
+      "nome": "Antônio Pereira da Silva",
+      "endereco": "Rua das Orquideas, 52 - Centro"
     },
     {
       "id": "2",
       "cpf": "123.789.456-70",
-      "fullName": "Joana da Silva Santos",
-      "address": "Rua Padre Anchieta, 45 - Via Maria"
+      "nome": "Joana da Silva Santos",
+      "endereco": "Rua Padre Anchieta, 45 - Via Maria"
     },
     {
       "id": "3",
       "cpf": "587.412.412-54",
-      "fullName": "Laura Felix Rosa",
-      "address": "Rua das Borboletas, 45 - Vila do Sol"
+      "nome": "Laura Felix Rosa",
+      "endereco": "Rua das Borboletas, 45 - Vila do Sol"
     },
     {
       "id": "4",
       "cpf": "444.555.888-77",
-      "fullName": "Jaqueline Horacio",
-      "address": "Rua da Primavera, 41 - Bairro João de Barro"
-    },
-    {
-      "id": "5",
-      "cpf": "662.568.974-14",
-      "fullName": "Catarina João josé",
-      "address": "Rua das Palmeiras, 77 - Jardim Floresta"
-    },
-    {
-      "id": "6",
-      "cpf": "654.456.645-45",
-      "fullName": "Pedro Fonseca da Silva",
-      "address": "Avenida Bem Te Vi, 88 - Bairro do Sol"
-    },
-    {
-      "id": "7",
-      "cpf": "444.455.255-54",
-      "fullName": "Regina Ferreira",
-      "address": "Avenida das Carambolas, 11 - Centro"
-    },
-    {
-      "id": "8",
-      "cpf": "123.789.456-70",
-      "fullName": "Joana da Silva Santos",
-      "address": "Rua Padre Anchieta, 45 - Via Maria"
-    },
-    {
-      "id": "df90",
-      "cpf": "587.412.412-54",
-      "fullName": "Laura Felix Rosa",
-      "address": "Rua das Borboletas, 45 - Vila do Sol"
-    },
-    {
-      "id": "9",
-      "cpf": "444.555.888-77",
-      "fullName": "Jaqueline Horacio",
-      "address": "Rua da Primavera, 41 - Bairro João de Barro"
-    },
-    {
-      "id": "10",
-      "cpf": "662.568.974-14",
-      "fullName": "Catarina João josé",
-      "address": "Rua das Palmeiras, 77 - Jardim Floresta"
-    },
-    {
-      "id": "11",
-      "cpf": "654.456.645-45",
-      "fullName": "Pedro Fonseca da Silva",
-      "address": "Avenida Bem Te Vi, 88 - Bairro do Sol"
-    },
-    {
-      "id": "12",
-      "cpf": "444.455.255-54",
-      "fullName": "Regina Ferreira",
-      "address": "Avenida das Carambolas, 11 - Centro"
-    },
-    {
-      "id": "13",
-      "cpf": "123.789.456-70",
-      "fullName": "Joana da Silva Santos",
-      "address": "Rua Padre Anchieta, 45 - Via Maria"
-    },
-    {
-      "id": "df92",
-      "cpf": "587.412.412-54",
-      "fullName": "Laura Felix Rosa",
-      "address": "Rua das Borboletas, 45 - Vila do Sol"
-    },
-    {
-      "id": "14",
-      "cpf": "444.555.888-77",
-      "fullName": "Jaqueline Horacio",
-      "address": "Rua da Primavera, 41 - Bairro João de Barro"
-    },
-    {
-      "id": "15",
-      "cpf": "662.568.974-14",
-      "fullName": "Catarina João josé",
-      "address": "Rua das Palmeiras, 77 - Jardim Floresta"
-    },
-    {
-      "id": "16",
-      "cpf": "654.456.645-45",
-      "fullName": "Pedro Fonseca da Silva",
-      "address": "Avenida Bem Te Vi, 88 - Bairro do Sol"
-    },
-    {
-      "id": "17",
-      "cpf": "444.455.255-54",
-      "fullName": "Regina Ferreira",
-      "address": "Avenida das Carambolas, 11 - Centro"
-    },
-    {
-      "id": "18",
-      "cpf": "123.789.456-70",
-      "fullName": "Joana da Silva Santos",
-      "address": "Rua Padre Anchieta, 45 - Via Maria"
-    },
-    {
-      "id": "19",
-      "cpf": "587.412.412-54",
-      "fullName": "Laura Felix Rosa",
-      "address": "Rua das Borboletas, 45 - Vila do Sol"
-    },
-    {
-      "id": "20",
-      "cpf": "444.555.888-77",
-      "fullName": "Jaqueline Horacio",
-      "address": "Rua da Primavera, 41 - Bairro João de Barro"
-    },
-    {
-      "id": "21",
-      "cpf": "662.568.974-14",
-      "fullName": "Catarina João josé",
-      "address": "Rua das Palmeiras, 77 - Jardim Floresta"
-    },
-    {
-      "id": "22",
-      "cpf": "654.456.645-45",
-      "fullName": "Pedro Fonseca da Silva",
-      "address": "Avenida Bem Te Vi, 88 - Bairro do Sol"
-    },
-    {
-      "id": "23",
-      "cpf": "444.455.255-54",
-      "fullName": "Regina Ferreira",
-      "address": "Avenida das Carambolas, 11 - Centro"
+      "nome": "Jaqueline Horacio",
+      "endereco": "Rua da Primavera, 41 - Bairro João de Barro"
     }
   ],
-  "medicaments": [
+  "medicamento": [
     {
       "id": "1",
-      "medicament": "Paracetamol",
-      "quantity": 100,
-      "expirationDate": "2024-12-31"
+      "formula": "Paracetamol",
+      "quantidade": 100,
+      "vencimento": "2024-12-31"
     },
     {
       "id": "2",
-      "medicament": "Ibuprofeno",
-      "quantity": 50,
-      "expirationDate": "2023-10-15"
+      "formula": "Ibuprofeno",
+      "quantidade": 50,
+      "vencimento": "2023-10-15"
     },
     {
       "id": "3",
-      "medicament": "Amoxicilina",
-      "quantity": 75,
-      "expirationDate": "2025-05-20"
+      "formula": "Amoxicilina",
+      "quantidade": 75,
+      "vencimento": "2025-05-20"
     },
     {
       "id": "e506",
-      "medicament": "Dipirona",
-      "quantity": "50",
-      "expirationDate": "2024-03-30"
+      "formula": "Dipirona",
+      "quantidade": "50",
+      "vencimento": "2024-03-30"
     },
     {
       "id": "04b4",
-      "medicament": "Magnésio Dimalato",
-      "quantity": "10",
-      "expirationDate": "2024-07-19"
+      "formula": "Magnésio Dimalato",
+      "quantidade": "10",
+      "vencimento": "2024-07-19"
     },
     {
       "id": "8df0",
-      "medicament": "Aspirina ",
-      "quantity": "41",
-      "expirationDate": "2024-05-12"
+      "formula": "Aspirina ",
+      "quantidade": "41",
+      "vencimento": "2024-05-12"
     },
     {
       "id": "0052",
-      "medicament": "Dipirona 1g",
-      "quantity": "20",
-      "expirationDate": "2024-04-06"
+      "formula": "Dipirona 1g",
+      "quantidade": "20",
+      "vencimento": "2024-04-06"
+    },
+    {
+      "id": "9c90",
+      "formula": "Ibuprofeno 200mg",
+      "quantidade": "12",
+      "vencimento": "2024-05-30"
     }
   ],
   "dispensation": [
     {
-      "id": "296a",
-      "date": "Segunda-feira, 15 de abril de 2024",
-      "patient": "",
-      "medicament": "",
-      "quantityInitial": 0
-    },
-    {
-      "id": "6ca3",
+      "id": "2a12",
       "date": "Terça-feira, 16 de abril de 2024",
-      "patient": "",
+      "patient": "Joana da Silva Santos",
       "medicament": "",
-      "quantityInitial": 0
-    },
-    {
-      "id": "81ac",
-      "date": "Terça-feira, 16 de abril de 2024",
-      "patient": "",
-      "medicament": "",
-      "quantityInitial": 0
+      "quantityMedicament": "12"
     }
   ]
 }
