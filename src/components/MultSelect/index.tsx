@@ -14,10 +14,11 @@ import {
 
 interface MultiSelectProps {
     options: string[]
-    onChange?: (selectedOptions: string[]) => void
+    onChange?: (selectedOption: string) => void
+    name: string
 }
 
-const MultiSelect: React.FC<MultiSelectProps> = ({ options, onChange }) => {
+const MultiSelect: React.FC<MultiSelectProps> = ({ options, onChange, name }) => {
 
   return (
     <Stack direction="column">
@@ -42,7 +43,8 @@ const MultiSelect: React.FC<MultiSelectProps> = ({ options, onChange }) => {
             <AutoCompleteItem
               key={`option-${oid}`}
               value={option}      
-              onChange={onChange}     
+              onClick={() => onChange && onChange(option)}  
+              name={name}   
             >
               {option}
             </AutoCompleteItem>

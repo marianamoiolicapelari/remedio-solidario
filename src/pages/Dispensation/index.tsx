@@ -20,13 +20,13 @@ interface FormPatients {
 
 interface FormMedicaments {
   id: string
-  medicamento: string
+  formula: string
   quantidade: number
 }
 
 const Dispensation = () => {
   const [patients, setPatients] = useState<FormPatients[]>([])
-  const [medicaments, setMedicaments] = useState('')
+  const [medicaments, _setMedicaments] = useState('')
   const [itemList, setItemList] = useState<FormMedicaments[]>([])
 
   const initialValues: FormData = {
@@ -56,34 +56,33 @@ const Dispensation = () => {
         console.error('Erro ao buscar pacientes:', error)
       }
     }
-    fetchPatients() 
+    fetchPatients()
   }, [])
 
   useEffect(() => {
     const fetchMedicaments = async () => {
       try {
-        const response = await api.get(`/medicamento?medicament=${medicamento}`)
+        const response = await api.get(`/medicamento?formula=${medicaments}`)
         const medicamentsData = response.data
         setItemList(medicamentsData)
         console.log('RESPOSTA_MEDICAMENTOS', medicamentsData)
       } catch (error) {
-        console.error('Erro ao buscar medicamentos:', error)     
+        console.error('Erro ao buscar medicamentos:', error)
       }
     }
-    fetchMedicaments() 
+    fetchMedicaments()
   }, [medicaments])
 
   function handleAddMedicaments(event: { preventDefault: () => void }) {
     event.preventDefault()
 
-  
-  } 
+  }
 
   const handleSubmitForm = async (values: FormData, { resetForm }: FormikHelpers<FormData>) => {
     console.log('INPUT', values.quantidade)
 
     try {
-      const { status } = await api.post('/dispensation', values, {
+      const { status } = await api.post('/prescricao', values, {
         headers: {
           'Content-Type': 'application/json'
         }
@@ -130,15 +129,15 @@ const Dispensation = () => {
                 </FormControl>
               </Flex>
               <FormControl mt={7} h='80px'>
-                <FormLabel htmlFor='patient' color='#808080'>Paciente</FormLabel>
+                <FormLabel htmlFor='paciente' color='#808080'>Paciente</FormLabel>
                 <Select
-                  id='patient'
-                  name='patient'
+                  id='paciente'
+                  name='paciente'
                   placeholder='Selecione o nome do paciente'
                   w='73%'
                   autoFocus
                   onChange={e => {
-                    setFieldValue('patient', e.target.value)
+                    setFieldValue('paciente', e.target.value)
                   }}
                 >
                   {patients && patients.map(patient => (
@@ -149,22 +148,14 @@ const Dispensation = () => {
 
               <Flex mt={5} gap={6} w='92%'>
                 <FormControl>
-                  <FormLabel htmlFor="medicamento" color='#808080'>Digite o nome do medicamento</FormLabel>
-                  {/* <Input
-                    id='medicament'
-                    type="text"
-                    name="medicament"
-                    placeholder="Digite o nome do medicamento"
-                    onChange={e => {
-                      setMedicaments(e.target.value)
-                      setFieldValue('medicament', e.target.value)
-                    }}
-                  /> */}
-                  <MultSelect
-                    options={itemList.map(item => item.medicamento)}    
-                    onChange={selectedOptions => {
-                      setFieldValue('medicament', selectedOptions)
-                    }}           
+                  <FormLabel htmlFor="formula" color='#808080'>Digite o nome do medicamento</FormLabel>
+                  <MultSelect      
+                    name='formula'              
+                    options={itemList.map(item => item.formula)}
+                    onChange={(selectedOption: string) => {
+                      setFieldValue('formula', selectedOption)
+                      console.log('SETFIELDVALUE', selectedOption)
+                    }}            
                   />
 
                 </FormControl>
@@ -176,7 +167,7 @@ const Dispensation = () => {
                     name="quantidade"
                     placeholder="Quantidade"
                     onChange={e => {
-                      setFieldValue('quantityMedicament', e.target.value)
+                      setFieldValue('quantidade', e.target.value)
                     }}
                   />
                 </FormControl>
@@ -192,16 +183,14 @@ const Dispensation = () => {
                       <Tr>
                         <Th>Nome Medicamento</Th>
                         <Th>Quantidade</Th>
-                        <Th>Estoque</Th>
                         <Th></Th>
                       </Tr>
                     </Thead>
                     <Tbody>
-                  
+
                       <Tr>
                         <Td>Dipirona</Td>
                         <Td>2</Td>
-                        <Td>50</Td>
                         <Td>
                           <Flex justify={'end'}>
                             <Tooltip label='Excluir' fontSize='md' placement='top'>
@@ -213,7 +202,7 @@ const Dispensation = () => {
                           </Flex>
                         </Td>
                       </Tr>
-                      
+
                     </Tbody>
                   </Table>
                 </TableContainer>
