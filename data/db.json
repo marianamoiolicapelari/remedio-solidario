@@ -1,25 +1,25 @@
 {
   "paciente": [
     {
-      "id": "1",
+      "id": 1,
       "cpf": "789.456.123-87",
       "nome": "Antônio Pereira da Silva",
       "endereco": "Rua das Orquideas, 52 - Centro"
     },
     {
-      "id": "2",
+      "id": 2,
       "cpf": "123.789.456-70",
       "nome": "Joana da Silva Santos",
       "endereco": "Rua Padre Anchieta, 45 - Via Maria"
     },
     {
-      "id": "3",
+      "id": 3,
       "cpf": "587.412.412-54",
       "nome": "Laura Felix Rosa",
       "endereco": "Rua das Borboletas, 45 - Vila do Sol"
     },
     {
-      "id": "4",
+      "id": 4,
       "cpf": "444.555.888-77",
       "nome": "Jaqueline Horacio",
       "endereco": "Rua da Primavera, 41 - Bairro João de Barro"
@@ -27,158 +27,61 @@
   ],
   "medicamento": [
     {
-      "id": "1",
+      "id": 1,
       "formula": "Paracetamol",
       "quantidade": 100,
       "vencimento": "2024-12-31"
     },
     {
-      "id": "2",
+      "id": 2,
       "formula": "Ibuprofeno",
       "quantidade": 50,
       "vencimento": "2023-10-15"
     },
     {
-      "id": "3",
+      "id": 3,
       "formula": "Amoxicilina",
       "quantidade": 75,
       "vencimento": "2025-05-20"
     },
     {
-      "id": "e506",
+      "id": 4,
       "formula": "Dipirona",
-      "quantidade": "50",
+      "quantidade": 50,
       "vencimento": "2024-03-30"
     },
     {
-      "id": "04b4",
+      "id": 5,
       "formula": "Magnésio Dimalato",
-      "quantidade": "10",
+      "quantidade": 10,
       "vencimento": "2024-07-19"
     },
     {
-      "id": "8df0",
+      "id": 6,
       "formula": "Aspirina ",
-      "quantidade": "41",
+      "quantidade": 41,
       "vencimento": "2024-05-12"
     },
     {
-      "id": "0052",
+      "id": 7,
       "formula": "Dipirona 1g",
-      "quantidade": "20",
+      "quantidade": 20,
       "vencimento": "2024-04-06"
     },
     {
-      "id": "9c90",
+      "id": 8,
       "formula": "Ibuprofeno 200mg",
-      "quantidade": "12",
+      "quantidade": 12,
       "vencimento": "2024-05-30"
     }
   ],
   "prescricao": [
     {
-      "id": "2a12",
-      "data": "Terça-feira, 16 de abril de 2024",
-      "paciente": "Joana da Silva Santos",
-      "formula": "",
-      "quantidade": "12"
-    },
-    {
-      "id": "fd60",
-      "data": "Quarta-feira, 17 de abril de 2024",
-      "paciente": "Laura Felix Rosa",
-      "formula": "",
-      "quantidade": "1"
-    },
-    {
-      "id": "a41a",
-      "data": "Quinta-feira, 18 de abril de 2024",
-      "paciente": "Joana da Silva Santos",
-      "formula": "",
-      "quantidade": "42"
-    },
-    {
-      "id": "2c31",
-      "data": "Quinta-feira, 18 de abril de 2024",
-      "paciente": "",
-      "formula": "",
-      "quantidade": "12"
-    },
-    {
-      "id": "e1f2",
-      "data": "Quinta-feira, 18 de abril de 2024",
-      "paciente": "Joana da Silva Santos",
-      "formula": "",
-      "quantidade": "12"
-    },
-    {
-      "id": "dbe6",
-      "data": "Quinta-feira, 18 de abril de 2024",
-      "paciente": "Antônio Pereira da Silva",
-      "formula": "",
-      "quantidade": "10"
-    },
-    {
-      "id": "f3c9",
-      "data": "Quinta-feira, 18 de abril de 2024",
-      "paciente": "Joana da Silva Santos",
-      "formula": "",
-      "quantidade": "12",
-      "medicament": [
-        "Amoxicilina"
-      ]
-    },
-    {
-      "id": "2981",
-      "data": "Quinta-feira, 18 de abril de 2024",
-      "paciente": "Joana da Silva Santos",
-      "formula": [
-        "Paracetamol"
-      ],
-      "quantidade": "42"
-    },
-    {
-      "id": "cdf9",
-      "data": "Quinta-feira, 18 de abril de 2024",
-      "paciente": "Joana da Silva Santos",
-      "formula": "",
-      "quantidade": "12"
-    },
-    {
-      "id": "3215",
-      "data": "Quinta-feira, 18 de abril de 2024",
-      "paciente": "",
-      "formula": "",
-      "quantidade": 0
-    },
-    {
-      "id": "9ebb",
-      "data": "Quinta-feira, 18 de abril de 2024",
-      "paciente": "Antônio Pereira da Silva",
-      "formula": "",
-      "quantidade": "1"
-    },
-    {
-      "id": "be27",
-      "data": "Quinta-feira, 18 de abril de 2024",
-      "paciente": "Jaqueline Horacio",
-      "formula": "",
-      "quantidade": "41"
-    },
-    {
-      "id": "963f",
-      "data": "Quinta-feira, 18 de abril de 2024",
-      "paciente": "Joana da Silva Santos",
-      "formula": "",
-      "quantidade": "12",
-      "medicament": "Dipirona 1g"
-    },
-    {
-      "id": "59df",
+      "id": 1,
       "data": "Quinta-feira, 18 de abril de 2024",
       "paciente": "Laura Felix Rosa",
       "formula": "Dipirona 1g",
-      "quantidade": "12"
+      "quantidade": 12
     }
   ]
 }

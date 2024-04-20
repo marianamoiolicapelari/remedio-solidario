@@ -6,7 +6,7 @@ import { useEffect, useState } from 'react'
 import { toast } from 'react-toastify'
 
 interface FormData {
-  id: string
+  id: number
   cpf: string
   nome: string
   endereco: string
@@ -58,7 +58,7 @@ const PatientRegistration = () => {
     setEditedPatient(null)
   }
 
-  const handleDeletePatient = async (id: string) => {
+  const handleDeletePatient: (id: number) => void = async (id: number) => {
     try {
       await api.delete(`/paciente/${id}`)
       setPatients(patients.filter(patient => patient.id !== id))

@@ -20,7 +20,7 @@ const Medicament = () => {
 
   const validationSchema = Yup.object({
     formula: Yup.string().required('Nome do medicamento é obrigatório'),
-    quantidade: Yup.string().required('A quantidade é obrigatória'),
+    quantidade: Yup.number().required('A quantidade é obrigatória'),
     vencimento: Yup.string().required('Data de vencimento é obrigatória'),
   })
 
@@ -77,7 +77,7 @@ const Medicament = () => {
 
               <FormControl mt={7} h='80px'>
                 <FormLabel htmlFor='quantidade' color='#808080'>Quantidade</FormLabel>
-                <Field as={Input} id='quantidade' name='quantidade' type='text' placeholder='Digite a quantidade' width='30%'/>
+                <Field as={Input} id='quantidade' name='quantidade' type='number' placeholder='Digite a quantidade' width='30%'/>
                 {errors.quantidade && touched.quantidade && <Text color='#ff0000' fontSize={14} fontWeight='500' pl={1}>{errors.quantidade}</Text>}
               </FormControl>
 

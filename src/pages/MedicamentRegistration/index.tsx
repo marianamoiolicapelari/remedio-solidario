@@ -7,9 +7,9 @@ import { toast } from 'react-toastify'
 import FormattedDate from '../../common/FormattedDate'
 
 interface FormData {
-  id: string
+  id: number
   formula: string
-  quantidade: string
+  quantidade: number
   vencimento: string
 }
 
@@ -56,7 +56,7 @@ const MedicamentRegistration = () => {
     setEditedMedicament(null)
   }
 
-  const handleDeleteMedicament = async (id: string) => {
+  const handleDeleteMedicament = async (id: number) => {
     try {
       await api.delete(`/medicamento/${id}`)
       setMedicaments(medicaments.filter(medicament => medicament.id !== id))      

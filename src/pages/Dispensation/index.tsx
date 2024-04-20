@@ -7,6 +7,7 @@ import { api } from '../../services/api'
 import { useEffect, useState } from 'react'
 
 interface FormData {
+  id: number
   data: string
   paciente: string
   formula: string
@@ -14,12 +15,12 @@ interface FormData {
 }
 
 interface FormPatients {
-  id: string
+  id: number
   nome: string
 }
 
 interface FormMedicaments {
-  id: string
+  id: number
   formula: string
   quantidade: number
 }
@@ -28,8 +29,10 @@ const Dispensation = () => {
   const [patients, setPatients] = useState<FormPatients[]>([])
   const [medicaments, _setMedicaments] = useState('')
   const [itemList, setItemList] = useState<FormMedicaments[]>([])
+  const [tableItems, setTableItems] = useState<FormMedicaments[]>([])
 
   const initialValues: FormData = {
+    id: 0,
     data: getFormattedDate(),
     paciente: '',
     formula: '',
@@ -73,14 +76,23 @@ const Dispensation = () => {
     fetchMedicaments()
   }, [medicaments])
 
-  function handleAddMedicaments(event: { preventDefault: () => void }) {
-    event.preventDefault()
+  console.log('LISTA_MEDICAMENTOS', medicaments)
 
+  function handleAddMedicaments(values: FormMedicaments, event: { preventDefault: () => void }) {
+    event.preventDefault()
+    const newItem: FormMedicaments = {
+      id: values.id,
+      formula: values.formula,
+      quantidade: values.quantidade
+     
+    }
+    setTableItems([...tableItems, newItem])
+    console.log('NOVO_ITEM', newItem)
+    console.log('LISTA_TABELA', tableItems)
   }
 
   const handleSubmitForm = async (values: FormData, { resetForm }: FormikHelpers<FormData>) => {
-    console.log('INPUT', values.quantidade)
-
+ 
     try {
       const { status } = await api.post('/prescricao', values, {
         headers: {
@@ -149,16 +161,15 @@ const Dispensation = () => {
               <Flex mt={5} gap={6} w='92%'>
                 <FormControl>
                   <FormLabel htmlFor="formula" color='#808080'>Digite o nome do medicamento</FormLabel>
-                  <MultSelect      
-                    name='formula'              
+                  <MultSelect
+                    name='formula'
                     options={itemList.map(item => item.formula)}
                     onChange={(selectedOption: string) => {
-                      setFieldValue('formula', selectedOption)
-                      console.log('SETFIELDVALUE', selectedOption)
-                    }}            
+                      setFieldValue('formula', selectedOption)         
+                    }}
                   />
-
                 </FormControl>
+
                 <FormControl>
                   <FormLabel htmlFor="quantidade" color='#808080'>Quantidade</FormLabel>
                   <Input
@@ -171,8 +182,9 @@ const Dispensation = () => {
                     }}
                   />
                 </FormControl>
+                
                 <FormControl display='flex' alignItems='flex-end'>
-                  <Button type="submit" name="adicionar" onClick={handleAddMedicaments}>Adicionar</Button>
+                  <Button type="submit" name="adicionar" onClick={(e) => handleAddMedicaments(values, e)}>Adicionar</Button>
                 </FormControl>
               </Flex>
 
@@ -187,22 +199,22 @@ const Dispensation = () => {
                       </Tr>
                     </Thead>
                     <Tbody>
-
-                      <Tr>
-                        <Td>Dipirona</Td>
-                        <Td>2</Td>
-                        <Td>
-                          <Flex justify={'end'}>
-                            <Tooltip label='Excluir' fontSize='md' placement='top'>
-                              {/* <Button mr={2} onClick={() => handleDeleteMedicament(medicament.id)}> */}
-                              <Button>
-                                <MdDeleteOutline />
-                              </Button>
-                            </Tooltip>
-                          </Flex>
-                        </Td>
-                      </Tr>
-
+                      {tableItems.map((item, index) => (
+                        <Tr key={index}>
+                          <Td>{item.formula}</Td>
+                          <Td>{item.quantidade}</Td>
+                          <Td>
+                            <Flex justify={'end'}>
+                              <Tooltip label='Excluir' fontSize='md' placement='top'>
+                                {/* <Button mr={2} onClick={() => handleDeleteMedicament(medicament.id)}> */}
+                                <Button>
+                                  <MdDeleteOutline />
+                                </Button>
+                              </Tooltip>
+                            </Flex>
+                          </Td>
+                        </Tr>
+                      ))}
                     </Tbody>
                   </Table>
                 </TableContainer>
