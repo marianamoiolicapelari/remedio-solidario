@@ -1,6 +1,5 @@
 import { useNavigate } from 'react-router-dom'
-import { Flex } from '@chakra-ui/react'
-import { Button, Image } from '@chakra-ui/react'
+import { Flex, Button, Image } from '@chakra-ui/react'
 
 import Logo from '../../assets/logo.png'
 import RemedioSolidario from '../../assets/logo-branco.png'

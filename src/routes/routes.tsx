@@ -12,11 +12,11 @@ export default function AppRoutes() {
     <Routes>
       <Route path="/" element={<Login />} />
       <Route path="/home" element={<Home />}>
-            <Route path='paciente' element={<Patient />} />
-            <Route path='lista-paciente' element={<PatientRegistration />} />
-            <Route path="medicamento" element={<Medicine />} />
-            <Route path='lista-medicamento' element={<MedicamentRegistration />} />
-            <Route path="dispensacao" element={<Dispensation />} />
+        <Route path='paciente' element={<Patient />} />
+        <Route path='lista-paciente' element={<PatientRegistration />} />
+        <Route path="medicamento" element={<Medicine />} />
+        <Route path='lista-medicamento' element={<MedicamentRegistration />} />
+        <Route path="dispensacao" element={<Dispensation />} />
       </Route>      
     </Routes>
   )

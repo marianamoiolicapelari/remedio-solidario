@@ -78,10 +78,42 @@
   "prescricao": [
     {
       "id": 1,
-      "data": "Quinta-feira, 18 de abril de 2024",
-      "paciente": "Laura Felix Rosa",
-      "formula": "Dipirona 1g",
-      "quantidade": 12
+      "data": "0000-00-00",
+      "paciente": {
+        "id": 1,
+        "nome": "nome",
+        "endereco": "endereço"
+      },
+      "medicamentos": {
+        "id": 1,
+        "formula": "nome",
+        "quantidade": 0,
+        "vencimento": "0000-00-00"
+      }
+    },
+    {
+      "id": "2d0b",
+      "paciente": {
+        "id": 1,
+        "cpf": "789.456.123-87",
+        "nome": "Antônio Pereira da Silva",
+        "endereco": "Rua das Orquideas, 52 - Centro"
+      },
+      "data": "2024-04-24",
+      "medicamentos": [
+        {
+          "id": 3,
+          "formula": "Amoxicilina",
+          "quantidade": 42,
+          "vencimento": "2025-05-20"
+        },
+        {
+          "id": 1,
+          "formula": "Paracetamol",
+          "quantidade": 10,
+          "vencimento": "2024-12-31"
+        }
+      ]
     }
   ]
 }

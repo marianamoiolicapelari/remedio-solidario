@@ -7,49 +7,56 @@ import { api } from '../../services/api'
 import { useEffect, useState } from 'react'
 
 interface FormData {
-  id: number
   data: string
-  paciente: string
-  formula: string
+  paciente: FormPatients
+  medicamento: FormMedicaments
   quantidade: number
 }
 
 interface FormPatients {
   id: number
   nome: string
+  endereco: string
 }
 
 interface FormMedicaments {
   id: number
   formula: string
   quantidade: number
+  vencimento: string
 }
 
 const Dispensation = () => {
   const [patients, setPatients] = useState<FormPatients[]>([])
-  const [medicaments, _setMedicaments] = useState('')
   const [itemList, setItemList] = useState<FormMedicaments[]>([])
   const [tableItems, setTableItems] = useState<FormMedicaments[]>([])
 
-  const initialValues: FormData = {
-    id: 0,
-    data: getFormattedDate(),
-    paciente: '',
-    formula: '',
-    quantidade: 0
-  }
-
-  function getFormattedDate() {
+  const getFormattedDate = () => {
     const currentDate = new Date()
-    const formattedDate = currentDate.toLocaleDateString('pt-BR', {
-      weekday: 'long',
-      year: 'numeric',
-      month: 'long',
-      day: '2-digit'
-    })
-    return formattedDate.charAt(0).toUpperCase() + formattedDate.slice(1)
+    return currentDate.toISOString().slice(0, 10)
   }
 
+
+  const initialValues: FormData = {  
+    data: getFormattedDate(),
+    paciente: {} as FormPatients,
+    medicamento: {} as FormMedicaments,
+    quantidade: 0
+    // adicionar valor inicial para cada propriedade
+  }
+
+  // function getFormattedDate() {
+  //   const currentDate = new Date()
+  //   const formattedDate = currentDate.toLocaleDateString('pt-BR', {
+  //     weekday: 'long',
+  //     year: 'numeric',
+  //     month: 'long',
+  //     day: '2-digit'
+  //   })
+  //   return formattedDate.charAt(0).toUpperCase() + formattedDate.slice(1)
+  // }
+
+ 
   useEffect(() => {
     const fetchPatients = async () => {
       try {
@@ -65,36 +72,43 @@ const Dispensation = () => {
   useEffect(() => {
     const fetchMedicaments = async () => {
       try {
-        const response = await api.get(`/medicamento?formula=${medicaments}`)
-        const medicamentsData = response.data
-        setItemList(medicamentsData)
-        console.log('RESPOSTA_MEDICAMENTOS', medicamentsData)
+        const response = await api.get('/medicamento')
+        setItemList(response.data)
+        console.log('RESPOSTA_MEDICAMENTOS', response)
       } catch (error) {
         console.error('Erro ao buscar medicamentos:', error)
       }
     }
     fetchMedicaments()
-  }, [medicaments])
+  }, [])
 
-  console.log('LISTA_MEDICAMENTOS', medicaments)
-
-  function handleAddMedicaments(values: FormMedicaments, event: { preventDefault: () => void }) {
+  function handleAddMedicaments(formula: FormMedicaments, event: { preventDefault: () => void }) {
     event.preventDefault()
     const newItem: FormMedicaments = {
-      id: values.id,
-      formula: values.formula,
-      quantidade: values.quantidade
-     
+      id: formula.id,
+      formula: formula.formula || '',
+      quantidade: formula.quantidade || 0,
+      vencimento: formula.vencimento || ''
     }
     setTableItems([...tableItems, newItem])
-    console.log('NOVO_ITEM', newItem)
-    console.log('LISTA_TABELA', tableItems)
+
+    console.log('formula', formula)
+   
+    console.log('ITENS_TABELA', tableItems)
   }
 
   const handleSubmitForm = async (values: FormData, { resetForm }: FormikHelpers<FormData>) => {
- 
+    const { paciente } = values
     try {
-      const { status } = await api.post('/prescricao', values, {
+      const postData = {
+        data: new Date().toISOString().slice(0, 10), // Atualiza a data para o momento do envio
+        paciente,
+        medicamentos: tableItems // Adiciona os medicamentos selecionados
+      }
+
+      console.log('POSTDATA', postData)
+
+      const { status } = await api.post('/prescricao', postData, {
         headers: {
           'Content-Type': 'application/json'
         }
@@ -102,6 +116,8 @@ const Dispensation = () => {
 
       if (status === 201 || status === 200) {
         toast.success('Enviado com sucesso!')
+        resetForm()
+        setTableItems([])
         console.log('DADOS_ENVIADOS', values)
         resetForm()
       }
@@ -129,7 +145,8 @@ const Dispensation = () => {
             <Form>
               <Flex alignItems='center' justify='space-between'>
                 <Text fontWeight='bold' fontSize='xl'>Dispensação de Medicamentos</Text>
-                <FormControl w='250px'>
+                <FormControl w='20
+                0px'>
                   <Input
                     name='date'
                     variant='unstyled'
@@ -148,25 +165,28 @@ const Dispensation = () => {
                   placeholder='Selecione o nome do paciente'
                   w='73%'
                   autoFocus
-                  onChange={e => {
-                    setFieldValue('paciente', e.target.value)
+                  onChange={e => { 
+                    const paciente = patients.find(patient => patient.id === Number(e.target.value))
+                    setFieldValue('paciente', paciente)
                   }}
                 >
                   {patients && patients.map(patient => (
-                    <option key={patient.id} value={patient.nome}>{patient.nome}</option>
+                    <option key={patient.id} value={patient.id}>{patient.nome}</option>
                   ))}
                 </Select>
               </FormControl>
 
               <Flex mt={5} gap={6} w='92%'>
                 <FormControl>
-                  <FormLabel htmlFor="formula" color='#808080'>Digite o nome do medicamento</FormLabel>
+                  <FormLabel htmlFor="medicamento" color='#808080'>Digite o nome do medicamento</FormLabel>
                   <MultSelect
-                    name='formula'
+                    name='medicamento'
                     options={itemList.map(item => item.formula)}
                     onChange={(selectedOption: string) => {
-                      setFieldValue('formula', selectedOption)         
+                      const option = itemList.find((item) => item.formula === selectedOption)                      
+                      setFieldValue('medicamento', option)
                     }}
+
                   />
                 </FormControl>
 
@@ -178,13 +198,13 @@ const Dispensation = () => {
                     name="quantidade"
                     placeholder="Quantidade"
                     onChange={e => {
-                      setFieldValue('quantidade', e.target.value)
+                      setFieldValue('quantidade', Number(e.target.value))
                     }}
                   />
                 </FormControl>
-                
+
                 <FormControl display='flex' alignItems='flex-end'>
-                  <Button type="submit" name="adicionar" onClick={(e) => handleAddMedicaments(values, e)}>Adicionar</Button>
+                  <Button name="adicionar" onClick={(e) => handleAddMedicaments({...values.medicamento, quantidade: values.quantidade}, e)}>Adicionar</Button>
                 </FormControl>
               </Flex>
 
