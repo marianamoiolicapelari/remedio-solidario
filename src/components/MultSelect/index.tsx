@@ -36,7 +36,7 @@ const MultiSelect: React.FC<MultiSelectProps> = ({ options, onChange, name }) =>
               ></path>
             </Icon>
           </InputLeftElement>
-          <AutoCompleteInput placeholder="Buscar..." />
+          <AutoCompleteInput placeholder="Buscar..."  autoComplete="off"/>
         </InputGroup>
         <AutoCompleteList>
           {options.map((option, oid) => (

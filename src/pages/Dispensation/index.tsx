@@ -15,6 +15,7 @@ interface FormData {
 
 interface FormPatients {
   id: number
+  cpf: string
   nome: string
   endereco: string
 }
@@ -31,15 +32,16 @@ const Dispensation = () => {
   const [itemList, setItemList] = useState<FormMedicaments[]>([])
   const [tableItems, setTableItems] = useState<FormMedicaments[]>([])
 
-  const getFormattedDate = () => {
+  const getDate = () => {
     const currentDate = new Date()
     return currentDate.toISOString().slice(0, 10)
   }
 
   const initialValues: FormData = {
-    data: getFormattedDate(),
+    data: getDate(),
     paciente: {
       id: 0,
+      cpf: '',
       nome: '',
       endereco: ''
     } as FormPatients,
@@ -52,16 +54,16 @@ const Dispensation = () => {
     quantidade: 0
   }
 
-  // function getFormattedDate() {
-  //   const currentDate = new Date()
-  //   const formattedDate = currentDate.toLocaleDateString('pt-BR', {
-  //     weekday: 'long',
-  //     year: 'numeric',
-  //     month: 'long',
-  //     day: '2-digit'
-  //   })
-  //   return formattedDate.charAt(0).toUpperCase() + formattedDate.slice(1)
-  // }
+  const formattedDate = (data: string) => {
+    const currentDate = new Date(data)
+    const formattedDate = currentDate.toLocaleDateString('pt-BR', {
+      weekday: 'long',
+      year: 'numeric',
+      month: 'long',
+      day: '2-digit'
+    })
+    return formattedDate.charAt(0).toUpperCase() + formattedDate.slice(1)
+  }
 
   useEffect(() => {
     const fetchPatients = async () => {
@@ -88,7 +90,7 @@ const Dispensation = () => {
     fetchMedicaments()
   }, [])
 
-  function handleAddMedicaments(formula: FormMedicaments, event: { preventDefault: () => void }) {
+  const handleAddMedicaments = (formula: FormMedicaments, event: { preventDefault: () => void }) => {
     event.preventDefault()
     const newItem: FormMedicaments = {
       id: formula.id,
@@ -96,11 +98,16 @@ const Dispensation = () => {
       quantidade: formula.quantidade,
       vencimento: formula.vencimento
     }
-    setTableItems([...tableItems, newItem])
+    setTableItems([...tableItems, newItem])    
+  }
 
-    console.log('formula', formula)
-
-    console.log('ITENS_TABELA', tableItems)
+  const handleDeleteMedicament = (id: number) => {
+    try {    
+      setTableItems(tableItems.filter(formula => formula.id !== id))    
+      console.log('DELETE_MEDICAMENTS', tableItems)  
+    } catch (error) {
+      console.error('Erro ao excluir paciente:', error)
+    }
   }
 
   const handleSubmitForm = async (values: FormData, { resetForm }: FormikHelpers<FormData>) => {
@@ -122,8 +129,7 @@ const Dispensation = () => {
 
       if (status === 201 || status === 200) {
         toast.success('Enviado com sucesso!')
-        setTableItems([])
-        console.log('DADOS_ENVIADOS', values)
+        setTableItems([])        
         resetForm()
       }
       if (status === 409) {
@@ -134,6 +140,8 @@ const Dispensation = () => {
       toast.error('Falha no sistema! Tente novamente')
     }
   }
+
+  console.log('tableItems',tableItems)
 
   return (
     <>
@@ -150,12 +158,11 @@ const Dispensation = () => {
             <Form>
               <Flex alignItems='center' justify='space-between'>
                 <Text fontWeight='bold' fontSize='xl'>Dispensação de Medicamentos</Text>
-                <FormControl w='20
-                0px'>
+                <FormControl w='210px'>
                   <Input
                     name='date'
                     variant='unstyled'
-                    value={values.data}
+                    value={formattedDate(values.data)}
                     onChange={e => {
                       setFieldValue('date', e.target.value)
                     }}
@@ -230,10 +237,9 @@ const Dispensation = () => {
                           <Td>{item.quantidade}</Td>
                           <Td>
                             <Flex justify={'end'}>
-                              <Tooltip label='Excluir' fontSize='md' placement='top'>
-                                {/* <Button mr={2} onClick={() => handleDeleteMedicament(medicament.id)}> */}
+                              <Tooltip label='Excluir' fontSize='md' placement='top'>                              
                                 <Button>
-                                  <MdDeleteOutline />
+                                  <MdDeleteOutline onClick={() => handleDeleteMedicament(item.id)}/>
                                 </Button>
                               </Tooltip>
                             </Flex>

@@ -77,10 +77,11 @@
   ],
   "prescricao": [
     {
-      "id": 1,
+      "id": "1",
       "data": "0000-00-00",
       "paciente": {
         "id": 1,
+        "cpf": "000.000.000-00",
         "nome": "nome",
         "endereco": "endereço"
       },
@@ -92,19 +93,49 @@
       }
     },
     {
-      "id": "2d0b",
+      "id": "d986",
+      "data": "2024-04-28",
       "paciente": {
         "id": 1,
         "cpf": "789.456.123-87",
         "nome": "Antônio Pereira da Silva",
         "endereco": "Rua das Orquideas, 52 - Centro"
       },
-      "data": "2024-04-24",
       "medicamentos": [
         {
           "id": 3,
           "formula": "Amoxicilina",
-          "quantidade": 42,
+          "quantidade": 10,
+          "vencimento": "2025-05-20"
+        },
+        {
+          "id": 3,
+          "formula": "Amoxicilina",
+          "quantidade": 14,
+          "vencimento": "2025-05-20"
+        },
+        {
+          "id": 1,
+          "formula": "Paracetamol",
+          "quantidade": 14,
+          "vencimento": "2024-12-31"
+        }
+      ]
+    },
+    {
+      "id": "94b8",
+      "data": "2024-04-28",
+      "paciente": {
+        "id": 1,
+        "cpf": "789.456.123-87",
+        "nome": "Antônio Pereira da Silva",
+        "endereco": "Rua das Orquideas, 52 - Centro"
+      },
+      "medicamentos": [
+        {
+          "id": 3,
+          "formula": "Amoxicilina",
+          "quantidade": 20,
           "vencimento": "2025-05-20"
         },
         {
