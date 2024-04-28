@@ -36,13 +36,20 @@ const Dispensation = () => {
     return currentDate.toISOString().slice(0, 10)
   }
 
-
-  const initialValues: FormData = {  
+  const initialValues: FormData = {
     data: getFormattedDate(),
-    paciente: {} as FormPatients,
-    medicamento: {} as FormMedicaments,
+    paciente: {
+      id: 0,
+      nome: '',
+      endereco: ''
+    } as FormPatients,
+    medicamento: {
+      id: 0,
+      formula: '',
+      quantidade: 0,
+      vencimento: ''
+    } as FormMedicaments,
     quantidade: 0
-    // adicionar valor inicial para cada propriedade
   }
 
   // function getFormattedDate() {
@@ -56,7 +63,6 @@ const Dispensation = () => {
   //   return formattedDate.charAt(0).toUpperCase() + formattedDate.slice(1)
   // }
 
- 
   useEffect(() => {
     const fetchPatients = async () => {
       try {
@@ -86,14 +92,14 @@ const Dispensation = () => {
     event.preventDefault()
     const newItem: FormMedicaments = {
       id: formula.id,
-      formula: formula.formula || '',
-      quantidade: formula.quantidade || 0,
-      vencimento: formula.vencimento || ''
+      formula: formula.formula,
+      quantidade: formula.quantidade,
+      vencimento: formula.vencimento
     }
     setTableItems([...tableItems, newItem])
 
     console.log('formula', formula)
-   
+
     console.log('ITENS_TABELA', tableItems)
   }
 
@@ -116,7 +122,6 @@ const Dispensation = () => {
 
       if (status === 201 || status === 200) {
         toast.success('Enviado com sucesso!')
-        resetForm()
         setTableItems([])
         console.log('DADOS_ENVIADOS', values)
         resetForm()
@@ -165,7 +170,7 @@ const Dispensation = () => {
                   placeholder='Selecione o nome do paciente'
                   w='73%'
                   autoFocus
-                  onChange={e => { 
+                  onChange={e => {
                     const paciente = patients.find(patient => patient.id === Number(e.target.value))
                     setFieldValue('paciente', paciente)
                   }}
@@ -183,7 +188,7 @@ const Dispensation = () => {
                     name='medicamento'
                     options={itemList.map(item => item.formula)}
                     onChange={(selectedOption: string) => {
-                      const option = itemList.find((item) => item.formula === selectedOption)                      
+                      const option = itemList.find((item) => item.formula === selectedOption)
                       setFieldValue('medicamento', option)
                     }}
 
@@ -204,7 +209,7 @@ const Dispensation = () => {
                 </FormControl>
 
                 <FormControl display='flex' alignItems='flex-end'>
-                  <Button name="adicionar" onClick={(e) => handleAddMedicaments({...values.medicamento, quantidade: values.quantidade}, e)}>Adicionar</Button>
+                  <Button name="adicionar" onClick={(e) => handleAddMedicaments({ ...values.medicamento, quantidade: values.quantidade }, e)}>Adicionar</Button>
                 </FormControl>
               </Flex>
 
