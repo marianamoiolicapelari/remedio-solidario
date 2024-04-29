@@ -13,13 +13,14 @@ import {
 } from "@chakra-ui/react"
 
 interface MultiSelectProps {
-    options: string[]
-    onChange?: (selectedOption: string) => void
-    name: string
+  options: string[]
+  onChange?: (selectedOption: string) => void
+  name: string
+  inputValue: string
 }
 
-const MultiSelect: React.FC<MultiSelectProps> = ({ options, onChange, name }) => {
-
+const MultiSelect: React.FC<MultiSelectProps> = ({ options, onChange, name, inputValue }) => {
+  
   return (
     <Stack direction="column">
       <AutoComplete rollNavigation>
@@ -36,15 +37,18 @@ const MultiSelect: React.FC<MultiSelectProps> = ({ options, onChange, name }) =>
               ></path>
             </Icon>
           </InputLeftElement>
-          <AutoCompleteInput placeholder="Buscar..."  autoComplete="off"/>
+          <AutoCompleteInput
+            value={inputValue}
+            placeholder="Buscar..."
+            autoComplete="off" />
         </InputGroup>
         <AutoCompleteList>
           {options.map((option, oid) => (
             <AutoCompleteItem
               key={`option-${oid}`}
-              value={option}      
-              onClick={() => onChange && onChange(option)}  
-              name={name}   
+              value={option}
+              onClick={() => onChange && onChange(option)}
+              name={name}
             >
               {option}
             </AutoCompleteItem>

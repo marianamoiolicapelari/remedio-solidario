@@ -1,6 +1,6 @@
 import { Box, Flex, FormControl, FormLabel, Input, Select, Text, Table, Thead, Tbody, Tr, Th, Td, TableContainer, Button, Tooltip } from '@chakra-ui/react'
 import { Formik, Form, FormikHelpers } from 'formik'
-import { Footer, Header, MultSelect } from '../../components'
+import { Footer, Header, MultSelect, BaseModal } from '../../components'
 import { MdDeleteOutline } from 'react-icons/md'
 import { toast } from 'react-toastify'
 import { api } from '../../services/api'
@@ -27,10 +27,22 @@ interface FormMedicaments {
   vencimento: string
 }
 
+interface ModalData {
+  data: string;
+  paciente: FormPatients;
+  medicamentos: FormMedicaments[];
+  medicamentoList: FormMedicaments[];
+}
+
 const Dispensation = () => {
   const [patients, setPatients] = useState<FormPatients[]>([])
   const [itemList, setItemList] = useState<FormMedicaments[]>([])
   const [tableItems, setTableItems] = useState<FormMedicaments[]>([])
+  const [inputValue, setInputValue] = useState("")
+  const [isEditModalOpen, setIsEditModalOpen] = useState(false)
+  const [modalData, setModalData] = useState<ModalData | null>(null)
+
+  console.log('MODALDATA', modalData)
 
   const getDate = () => {
     const currentDate = new Date()
@@ -82,7 +94,6 @@ const Dispensation = () => {
       try {
         const response = await api.get('/medicamento')
         setItemList(response.data)
-        console.log('RESPOSTA_MEDICAMENTOS', response)
       } catch (error) {
         console.error('Erro ao buscar medicamentos:', error)
       }
@@ -92,23 +103,37 @@ const Dispensation = () => {
 
   const handleAddMedicaments = (formula: FormMedicaments, event: { preventDefault: () => void }) => {
     event.preventDefault()
+
+    const existingItem = tableItems.find((item) => item.id === formula.id)
+
+    if (existingItem) {
+      toast.error('Este medicamento já foi adicionado.')
+      return
+    }
+
     const newItem: FormMedicaments = {
       id: formula.id,
       formula: formula.formula,
       quantidade: formula.quantidade,
       vencimento: formula.vencimento
     }
-    setTableItems([...tableItems, newItem])    
+    setTableItems([...tableItems, newItem])
   }
 
   const handleDeleteMedicament = (id: number) => {
-    try {    
-      setTableItems(tableItems.filter(formula => formula.id !== id))    
-      console.log('DELETE_MEDICAMENTS', tableItems)  
+    try {
+      setTableItems(tableItems.filter(formula => formula.id !== id))
     } catch (error) {
       console.error('Erro ao excluir paciente:', error)
     }
   }
+
+  const handleModalClose = () => {
+    setIsEditModalOpen(false)
+    setModalData(null)
+  }
+
+  const handlePrint = () => { }
 
   const handleSubmitForm = async (values: FormData, { resetForm }: FormikHelpers<FormData>) => {
     const { paciente } = values
@@ -129,8 +154,14 @@ const Dispensation = () => {
 
       if (status === 201 || status === 200) {
         toast.success('Enviado com sucesso!')
-        setTableItems([])        
+        setTableItems([])
         resetForm()
+        // Abrir o modal e definir os dados a serem exibidos
+        setIsEditModalOpen(true)
+        setModalData({
+          ...postData,
+          medicamentoList: postData.medicamentos
+        })
       }
       if (status === 409) {
         toast.error('Envie novamente')
@@ -140,8 +171,6 @@ const Dispensation = () => {
       toast.error('Falha no sistema! Tente novamente')
     }
   }
-
-  console.log('tableItems',tableItems)
 
   return (
     <>
@@ -192,11 +221,13 @@ const Dispensation = () => {
                 <FormControl>
                   <FormLabel htmlFor="medicamento" color='#808080'>Digite o nome do medicamento</FormLabel>
                   <MultSelect
+                    inputValue={inputValue}
                     name='medicamento'
                     options={itemList.map(item => item.formula)}
                     onChange={(selectedOption: string) => {
                       const option = itemList.find((item) => item.formula === selectedOption)
                       setFieldValue('medicamento', option)
+                      setInputValue(selectedOption)
                     }}
 
                   />
@@ -209,6 +240,7 @@ const Dispensation = () => {
                     type="number"
                     name="quantidade"
                     placeholder="Quantidade"
+                    value={values.quantidade || ''}
                     onChange={e => {
                       setFieldValue('quantidade', Number(e.target.value))
                     }}
@@ -216,7 +248,14 @@ const Dispensation = () => {
                 </FormControl>
 
                 <FormControl display='flex' alignItems='flex-end'>
-                  <Button name="adicionar" onClick={(e) => handleAddMedicaments({ ...values.medicamento, quantidade: values.quantidade }, e)}>Adicionar</Button>
+                  <Button
+                    name="adicionar"
+                    onClick={(e) => {
+                      handleAddMedicaments({ ...values.medicamento, quantidade: values.quantidade }, e)
+                      setInputValue('')
+                      setFieldValue('quantidade', '')
+                    }}
+                  >Adicionar</Button>
                 </FormControl>
               </Flex>
 
@@ -237,9 +276,9 @@ const Dispensation = () => {
                           <Td>{item.quantidade}</Td>
                           <Td>
                             <Flex justify={'end'}>
-                              <Tooltip label='Excluir' fontSize='md' placement='top'>                              
-                                <Button>
-                                  <MdDeleteOutline onClick={() => handleDeleteMedicament(item.id)}/>
+                              <Tooltip label='Excluir' fontSize='md' placement='top'>
+                                <Button onClick={() => handleDeleteMedicament(item.id)}>
+                                  <MdDeleteOutline />
                                 </Button>
                               </Tooltip>
                             </Flex>
@@ -265,6 +304,26 @@ const Dispensation = () => {
         </Formik>
       </Box>
       <Footer />
+      <BaseModal
+        size='xl'
+        isOpen={isEditModalOpen}
+        onClose={handleModalClose}
+        modalHeaderText="Remédio Solidário"
+        modalFooter={<Button type="submit" colorScheme="blue" mt={3} onClick={handlePrint}>Deseja Imprimir?</Button>}
+      >
+        <Box>
+          <Input type="text" value={modalData?.data} variant='unstyled' isReadOnly />
+          <Input type="text" value={modalData?.paciente.nome} variant='unstyled' isReadOnly />
+          <Input type="text" value={modalData?.paciente.cpf} variant='unstyled' isReadOnly />
+          <Input type="text" value={modalData?.paciente.endereco} variant='unstyled' isReadOnly />
+          {modalData?.medicamentoList.map((medicamento, id) => (
+            <>
+              <Input key={id} type="text" value={medicamento.formula} variant='unstyled' isReadOnly />
+              <Input key={id} type="text" value={medicamento.quantidade} variant='unstyled' isReadOnly />
+            </>
+          ))}
+        </Box>
+      </BaseModal >
     </>
   )
 }

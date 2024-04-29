@@ -77,24 +77,8 @@
   ],
   "prescricao": [
     {
-      "id": "1",
-      "data": "0000-00-00",
-      "paciente": {
-        "id": 1,
-        "cpf": "000.000.000-00",
-        "nome": "nome",
-        "endereco": "endereço"
-      },
-      "medicamentos": {
-        "id": 1,
-        "formula": "nome",
-        "quantidade": 0,
-        "vencimento": "0000-00-00"
-      }
-    },
-    {
-      "id": "d986",
-      "data": "2024-04-28",
+      "id": "536a",
+      "data": "2024-04-29",
       "paciente": {
         "id": 1,
         "cpf": "789.456.123-87",
@@ -105,44 +89,44 @@
         {
           "id": 3,
           "formula": "Amoxicilina",
-          "quantidade": 10,
+          "quantidade": 15,
           "vencimento": "2025-05-20"
         },
         {
-          "id": 3,
-          "formula": "Amoxicilina",
-          "quantidade": 14,
-          "vencimento": "2025-05-20"
-        },
-        {
-          "id": 1,
-          "formula": "Paracetamol",
-          "quantidade": 14,
-          "vencimento": "2024-12-31"
+          "id": 4,
+          "formula": "Dipirona",
+          "quantidade": 12,
+          "vencimento": "2024-03-30"
         }
       ]
     },
     {
-      "id": "94b8",
-      "data": "2024-04-28",
+      "id": "32c6",
+      "data": "2024-04-29",
       "paciente": {
-        "id": 1,
-        "cpf": "789.456.123-87",
-        "nome": "Antônio Pereira da Silva",
-        "endereco": "Rua das Orquideas, 52 - Centro"
+        "id": 3,
+        "cpf": "587.412.412-54",
+        "nome": "Laura Felix Rosa",
+        "endereco": "Rua das Borboletas, 45 - Vila do Sol"
       },
       "medicamentos": [
         {
           "id": 3,
           "formula": "Amoxicilina",
-          "quantidade": 20,
+          "quantidade": 10,
           "vencimento": "2025-05-20"
         },
         {
-          "id": 1,
-          "formula": "Paracetamol",
-          "quantidade": 10,
-          "vencimento": "2024-12-31"
+          "id": 5,
+          "formula": "Magnésio Dimalato",
+          "quantidade": 40,
+          "vencimento": "2024-07-19"
+        },
+        {
+          "id": 6,
+          "formula": "Aspirina ",
+          "quantidade": 22,
+          "vencimento": "2024-05-12"
         }
       ]
     }
