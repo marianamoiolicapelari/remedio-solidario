@@ -6,7 +6,7 @@ import {
   ModalHeader,
   ModalCloseButton,
   ModalBody,
-  ModalFooter,
+  ModalFooter
 } from "@chakra-ui/react"
 
 interface ModalProps extends ModalPropsChakra {
