@@ -9,7 +9,7 @@ import { MdDeleteOutline } from 'react-icons/md'
 import { toast } from 'react-toastify'
 import { api } from '../../services/api'
 import { useEffect, useState } from 'react'
-import Logo from '../../assets/logo.png'
+import Logo from '../../assets/logo-preto.png'
 
 interface FormData {
   data: string
@@ -33,10 +33,10 @@ interface FormMedicaments {
 }
 
 interface ModalData {
-  data: string;
-  paciente: FormPatients;
-  medicamentos: FormMedicaments[];
-  medicamentoList: FormMedicaments[];
+  data: string
+  paciente: FormPatients
+  medicamentos: FormMedicaments[]
+  medicamentoList: FormMedicaments[]
 }
 
 const Dispensation = () => {
@@ -44,7 +44,7 @@ const Dispensation = () => {
   const [itemList, setItemList] = useState<FormMedicaments[]>([])
   const [tableItems, setTableItems] = useState<FormMedicaments[]>([])
   const [inputValue, setInputValue] = useState("")
-  const [isEditModalOpen, setIsEditModalOpen] = useState(true)
+  const [isEditModalOpen, setIsEditModalOpen] = useState(false)
   const [modalData, setModalData] = useState<ModalData | null>(null)
 
   const getDate = () => {
@@ -136,7 +136,7 @@ const Dispensation = () => {
     setModalData(null)
   }
 
-  const handlePrint = () => { }
+  const handlePrint = () => { window.print() } 
 
   const handleSubmitForm = async (values: FormData, { resetForm }: FormikHelpers<FormData>) => {
     const { paciente } = values
@@ -190,7 +190,7 @@ const Dispensation = () => {
             <Form>
               <Flex alignItems='center' justify='space-between'>
                 <Text fontWeight='bold' fontSize='xl'>Dispensação de Medicamentos</Text>
-                <FormControl w='210px'>
+                <FormControl w='250px'>
                   <Input
                     name='date'
                     variant='unstyled'
