@@ -12,6 +12,7 @@ import {
 interface ModalProps extends ModalPropsChakra {
   modalFooter?: React.ReactNode
   modalHeaderText?: string
+  showCloseButton?: boolean
 }
 const BaseModal = ({
   children,
@@ -19,16 +20,19 @@ const BaseModal = ({
   onClose,
   modalHeaderText,
   modalFooter,
+  showCloseButton = true,
   ...rest
 }: ModalProps) => {
   return (
     <ModalChakra isOpen={isOpen} onClose={onClose} isCentered {...rest} >
       <ModalOverlay />
       <ModalContent>
-        <ModalHeader color='#247ba0' textAlign={"center"}>
+        <ModalHeader color='#247ba0' textAlign={'center'}>
           {modalHeaderText}
         </ModalHeader>
-        <ModalCloseButton color='#247ba0' />
+        {showCloseButton &&
+          <ModalCloseButton color='#247ba0' />
+        }
         <ModalBody>{children}</ModalBody>
         <ModalFooter>{modalFooter}</ModalFooter>
       </ModalContent>

@@ -1,7 +1,8 @@
 import {
   Box, Flex, FormControl, FormLabel, Input,
   Select, Text, Table, Thead, Tbody, Tr, Th, Td,
-  TableContainer, Button, Tooltip, OrderedList, ListItem
+  TableContainer, Button, Tooltip, OrderedList, ListItem,
+  Image
 } from '@chakra-ui/react'
 import { Formik, Form, FormikHelpers } from 'formik'
 import { Footer, Header, MultSelect, BaseModal } from '../../components'
@@ -9,7 +10,7 @@ import { MdDeleteOutline } from 'react-icons/md'
 import { toast } from 'react-toastify'
 import { api } from '../../services/api'
 import { useEffect, useState } from 'react'
-import Logo from '../../assets/logo-preto.png'
+import LogoRemedioSolidario from '../../assets/logo-preto.png'
 
 interface FormData {
   data: string
@@ -136,7 +137,10 @@ const Dispensation = () => {
     setModalData(null)
   }
 
-  const handlePrint = () => { window.print() } 
+  const handlePrint = () => {
+    window.print()
+    setIsEditModalOpen(false)
+  }
 
   const handleSubmitForm = async (values: FormData, { resetForm }: FormikHelpers<FormData>) => {
     const { paciente } = values
@@ -311,11 +315,21 @@ const Dispensation = () => {
         size='xl'
         isOpen={isEditModalOpen}
         onClose={handleModalClose}
-        modalFooter={<Button type="submit" colorScheme="blue" mt={3} onClick={handlePrint}>Imprimir</Button>}
+        showCloseButton={false}
+        modalFooter={
+          <Button
+            type="submit"
+            colorScheme="blue"
+            mt={3}
+            onClick={handlePrint}
+            display={['none', 'block']}
+          >
+            Imprimir
+          </Button>}
       >
-        <Header>
-          <img src={Logo} alt="Logo" />
-        </Header>
+        <Flex w='100%' h='70px' p={2} alignItems='center' justify='center' bg='#808080' borderRadius={2}>
+          <Image src={LogoRemedioSolidario} alt="Logo Projeto Remédio" w='auto' h='50px' />
+        </Flex>
         <Box>
           <Flex p={5} justify='center'>
             <Text fontWeight="bold" fontSize="lg" >Dispensação de Medicamentos</Text>
@@ -371,7 +385,7 @@ const Dispensation = () => {
             ))}
           </OrderedList>
         </Box>
-      </BaseModal >
+      </BaseModal>
     </>
   )
 }
