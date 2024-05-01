@@ -10,6 +10,7 @@ import { MdDeleteOutline } from 'react-icons/md'
 import { toast } from 'react-toastify'
 import { api } from '../../services/api'
 import { useEffect, useState } from 'react'
+import * as Yup from "yup"
 import LogoRemedioSolidario from '../../assets/logo-preto.png'
 
 interface FormData {
@@ -39,6 +40,12 @@ interface ModalData {
   medicamentos: FormMedicaments[]
   medicamentoList: FormMedicaments[]
 }
+
+const validationSchema = Yup.object().shape({
+  paciente: Yup.object().shape({
+    nome: Yup.string().required("Selecione um paciente")
+  })
+})
 
 const Dispensation = () => {
   const [patients, setPatients] = useState<FormPatients[]>([])
@@ -189,8 +196,9 @@ const Dispensation = () => {
         <Formik
           initialValues={initialValues}
           onSubmit={handleSubmitForm}
+          validationSchema={validationSchema}
         >
-          {({ values, setFieldValue }) => (
+          {({ values, setFieldValue, touched, errors }) => (
             <Form>
               <Flex alignItems='center' justify='space-between'>
                 <Text fontWeight='bold' fontSize='xl'>Dispensação de Medicamentos</Text>
@@ -222,6 +230,17 @@ const Dispensation = () => {
                     <option key={patient.id} value={patient.id}>{patient.nome}</option>
                   ))}
                 </Select>
+                {errors.paciente && touched.paciente && (
+                  <Text
+                    color="#ff0000"
+                    fontSize={14}
+                    fontWeight="500"
+                    pl={1}
+                    position="absolute"
+                  >
+                    {errors.paciente.nome}
+                  </Text>
+                )}
               </FormControl>
 
               <Flex mt={5} gap={6} w='92%'>
@@ -236,7 +255,6 @@ const Dispensation = () => {
                       setFieldValue('medicamento', option)
                       setInputValue(selectedOption)
                     }}
-
                   />
                 </FormControl>
 
@@ -251,7 +269,7 @@ const Dispensation = () => {
                     onChange={e => {
                       setFieldValue('quantidade', Number(e.target.value))
                     }}
-                  />
+                  />                 
                 </FormControl>
 
                 <FormControl display='flex' alignItems='flex-end'>
