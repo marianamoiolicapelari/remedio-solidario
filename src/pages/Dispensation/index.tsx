@@ -78,13 +78,15 @@ const Dispensation = () => {
   }
 
   const formattedDate = (data: string) => {
-    const currentDate = new Date(data)
-    const formattedDate = currentDate.toLocaleDateString('pt-BR', {
-      weekday: 'long',
-      year: 'numeric',
-      month: 'long',
-      day: '2-digit'
-    })
+    const getMonthName = (month: number) => {
+      const monthNames = ['Janeiro', 'Fevereiro', 'Março', 'Abril', 'Maio', 'Junho', 'Julho', 'Agosto', 'Setembro', 'Outubro', 'Novembro', 'Dezembro']
+      return monthNames[month - 1]
+    }
+
+    const weekDayNames = ['Domingo', 'Segunda-feira', 'Terça-feira', 'Quarta-feira', 'Quinta-feira', 'Sexta-feira', 'Sábado']
+    const [ano, mes, dia] = data.split('-')
+    const currentDate = new Date(parseInt(ano), parseInt(mes) - 1, parseInt(dia))
+    const formattedDate = `${weekDayNames[currentDate.getDay()]}, ${dia.padStart(2, '0')} de ${getMonthName(parseInt(mes))} de ${ano}`
     return formattedDate.charAt(0).toUpperCase() + formattedDate.slice(1)
   }
 
@@ -269,7 +271,7 @@ const Dispensation = () => {
                     onChange={e => {
                       setFieldValue('quantidade', Number(e.target.value))
                     }}
-                  />                 
+                  />
                 </FormControl>
 
                 <FormControl display='flex' alignItems='flex-end'>
