@@ -6,6 +6,7 @@ import { api } from '../../services/api'
 import { toast } from 'react-toastify'
 
 interface FormData {
+  id: number
   formula: string
   quantidade: number
   vencimento: string
@@ -13,6 +14,7 @@ interface FormData {
 
 const Medicament = () => {
   const initialValues: FormData = {
+    id: 0,
     formula: '',
     quantidade: 0,
     vencimento: ''
