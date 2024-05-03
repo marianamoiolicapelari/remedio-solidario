@@ -78,15 +78,13 @@ const Dispensation = () => {
   }
 
   const formattedDate = (data: string) => {
-    const getMonthName = (month: number) => {
-      const monthNames = ['Janeiro', 'Fevereiro', 'Março', 'Abril', 'Maio', 'Junho', 'Julho', 'Agosto', 'Setembro', 'Outubro', 'Novembro', 'Dezembro']
-      return monthNames[month - 1]
-    }
-
-    const weekDayNames = ['Domingo', 'Segunda-feira', 'Terça-feira', 'Quarta-feira', 'Quinta-feira', 'Sexta-feira', 'Sábado']
-    const [ano, mes, dia] = data.split('-')
-    const currentDate = new Date(parseInt(ano), parseInt(mes) - 1, parseInt(dia))
-    const formattedDate = `${weekDayNames[currentDate.getDay()]}, ${dia.padStart(2, '0')} de ${getMonthName(parseInt(mes))} de ${ano}`
+    const currentDate = new Date(data)
+    const formattedDate = currentDate.toLocaleDateString('pt-BR', {
+      weekday: 'long',
+      year: 'numeric',
+      month: 'long',
+      day: '2-digit'
+    })
     return formattedDate.charAt(0).toUpperCase() + formattedDate.slice(1)
   }
 
@@ -155,9 +153,9 @@ const Dispensation = () => {
     const { paciente } = values
     try {
       const postData = {
-        data: new Date().toISOString().slice(0, 10), // Atualiza a data para o momento do envio
+        data: new Date().toISOString().slice(0, 10), 
         paciente,
-        medicamentos: tableItems // Adiciona os medicamentos selecionados
+        medicamentos: tableItems 
       }
 
       console.log('POSTDATA', postData)
@@ -168,11 +166,13 @@ const Dispensation = () => {
         }
       })
 
-      if (status === 201 || status === 200) {
-        toast.success('Enviado com sucesso!')
+      if (status === 201 || status === 200) {        
+
+        setPatients([])
+
         setTableItems([])
         resetForm()
-        // Abrir o modal e definir os dados a serem exibidos
+           
         setIsEditModalOpen(true)
         setModalData({
           ...postData,
@@ -271,7 +271,7 @@ const Dispensation = () => {
                     onChange={e => {
                       setFieldValue('quantidade', Number(e.target.value))
                     }}
-                  />
+                  />                 
                 </FormControl>
 
                 <FormControl display='flex' alignItems='flex-end'>

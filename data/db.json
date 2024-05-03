@@ -105,66 +105,6 @@
           "vencimento": "2024-03-30"
         }
       ]
-    },
-    {
-      "id": "8f70",
-      "data": "2024-05-02",
-      "paciente": {
-        "id": 0,
-        "cpf": "666.666.666-66",
-        "nome": "Dora Diana Catarina",
-        "endereco": "Rua Das Rosas, 33 - Vila Maria"
-      },
-      "medicamentos": [
-        {
-          "id": 3,
-          "formula": "Amoxicilina",
-          "quantidade": 10,
-          "vencimento": "2025-05-20"
-        },
-        {
-          "id": 0,
-          "formula": "Azitromicina",
-          "quantidade": 12,
-          "vencimento": "2024-06-28"
-        },
-        {
-          "id": 1,
-          "formula": "Paracetamol",
-          "quantidade": 15,
-          "vencimento": "2024-12-31"
-        }
-      ]
-    },
-    {
-      "id": "d80f",
-      "data": "2024-05-02",
-      "paciente": {
-        "id": 5,
-        "cpf": "357.741.256-94",
-        "nome": "Maria Madalena de Jesus",
-        "endereco": "Rua Sol Nascente, 66 - Centro"
-      },
-      "medicamentos": [
-        {
-          "id": 1,
-          "formula": "Paracetamol",
-          "quantidade": 12,
-          "vencimento": "2024-12-31"
-        },
-        {
-          "id": 0,
-          "formula": "Azitromicina",
-          "quantidade": 24,
-          "vencimento": "2024-06-28"
-        },
-        {
-          "id": 4,
-          "formula": "Dipirona",
-          "quantidade": 8,
-          "vencimento": "2024-03-30"
-        }
-      ]
     }
   ]
 }
