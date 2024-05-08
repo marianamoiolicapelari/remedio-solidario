@@ -145,20 +145,20 @@ const MedicamentRegistration = () => {
       <BaseModal
         isOpen={isEditModalOpen}
         onClose={handleModalClose}
-        modalHeaderText="Editar Dados do Paciente"
+        modalHeaderText="Editar Dados do Medicamento"
         modalFooter={<Button type="submit" colorScheme="blue" mt={3} onClick={handleSubmit}>Salvar</Button>}
       >
         <Box as="form" >
           <FormControl>
-            <FormLabel>CPF</FormLabel>
+            <FormLabel>Medicamento</FormLabel>
             <Input type="text" name="formula" value={editedMedicament?.formula} onChange={handleInputChange} />
           </FormControl>
           <FormControl>
-            <FormLabel mt={4}>Nome do Paciente</FormLabel>
+            <FormLabel mt={4}>Quantidade</FormLabel>
             <Input type="text" name="quantidade" value={editedMedicament?.quantidade} onChange={handleInputChange} />
           </FormControl>
           <FormControl>
-            <FormLabel mt={4}>Endereço</FormLabel>
+            <FormLabel mt={4}>Data de Vencimento</FormLabel>
             <Input type="text" name="vencimento" value={editedMedicament?.vencimento} onChange={handleInputChange} />
           </FormControl>
         </Box>
