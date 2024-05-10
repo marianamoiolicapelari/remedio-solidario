@@ -4,7 +4,7 @@ import {
   TableContainer, Button, Tooltip, OrderedList, ListItem,
   Image
 } from '@chakra-ui/react'
-import { Formik, Form, FormikHelpers } from 'formik'
+import { Formik, Form, FormikHelpers, Field } from 'formik'
 import { Footer, Header, MultSelect, BaseModal } from '../../components'
 import { MdDeleteOutline } from 'react-icons/md'
 import { toast } from 'react-toastify'
@@ -16,19 +16,19 @@ import LogoRemedioSolidario from '../../assets/logo-preto.png'
 interface FormData {
   data: string
   paciente: FormPatients
-  medicamento: FormMedicaments
+  medicamento: FormMedicaments | undefined
   quantidade: number
 }
 
 interface FormPatients {
-  id: number
+  id: string
   cpf: string
   nome: string
   endereco: string
 }
 
 interface FormMedicaments {
-  id: number
+  id: string
   formula: string
   quantidade: number
   vencimento: string
@@ -43,8 +43,18 @@ interface ModalData {
 
 const validationSchema = Yup.object().shape({
   paciente: Yup.object().shape({
-    nome: Yup.string().required("Selecione um paciente")
-  })
+    id: Yup.string().required("Selecione um paciente"),
+    cpf: Yup.string(),
+    endereco: Yup.string(),
+    nome: Yup.string(),
+  }).required("Selecione um paciente"),
+  medicamento: Yup.object().shape({
+    id: Yup.string(),
+    formula: Yup.string(),
+    quantidade: Yup.number().required("Selecione pelo menos um medicamento"),
+    vencimento: Yup.string(),
+  }).required("Selecione pelo menos um medicamento") 
+
 })
 
 const Dispensation = () => {
@@ -54,6 +64,7 @@ const Dispensation = () => {
   const [inputValue, setInputValue] = useState("")
   const [isEditModalOpen, setIsEditModalOpen] = useState(false)
   const [modalData, setModalData] = useState<ModalData | null>(null)
+  const [message, setMessage] = useState('')
 
   const getDate = () => {
     const currentDate = new Date()
@@ -63,17 +74,12 @@ const Dispensation = () => {
   const initialValues: FormData = {
     data: getDate(),
     paciente: {
-      id: 0,
+      id: '',
       cpf: '',
       nome: '',
       endereco: ''
-    } as FormPatients,
-    medicamento: {
-      id: 0,
-      formula: '',
-      quantidade: 0,
-      vencimento: ''
-    } as FormMedicaments,
+    },
+    medicamento: undefined,
     quantidade: 0
   }
 
@@ -131,7 +137,7 @@ const Dispensation = () => {
     setTableItems([...tableItems, newItem])
   }
 
-  const handleDeleteMedicament = (id: number) => {
+  const handleDeleteMedicament = (id: string) => {
     try {
       setTableItems(tableItems.filter(formula => formula.id !== id))
     } catch (error) {
@@ -150,41 +156,44 @@ const Dispensation = () => {
   }
 
   const handleSubmitForm = async (values: FormData, { resetForm }: FormikHelpers<FormData>) => {
+    console.log('values', values)
     const { paciente } = values
-    try {
-      const postData = {
-        data: new Date().toISOString().slice(0, 10), 
-        paciente,
-        medicamentos: tableItems 
-      }
-
-      console.log('POSTDATA', postData)
-
-      const { status } = await api.post('/prescricao', postData, {
-        headers: {
-          'Content-Type': 'application/json'
+    if (tableItems.length !== 0) {
+      try {
+        const postData = {
+          data: new Date().toISOString().slice(0, 10),
+          paciente,
+          medicamentos: tableItems
         }
-      })
 
-      if (status === 201 || status === 200) {        
+        console.log('POSTDATA', postData)
 
-        setPatients([])
-
-        setTableItems([])
-        resetForm()
-           
-        setIsEditModalOpen(true)
-        setModalData({
-          ...postData,
-          medicamentoList: postData.medicamentos
+        const { status } = await api.post('/prescricao', postData, {
+          headers: {
+            'Content-Type': 'application/json'
+          }
         })
-      }
-      if (status === 409) {
-        toast.error('Envie novamente')
-      }
 
-    } catch (err) {
-      toast.error('Falha no sistema! Tente novamente')
+        if (status === 201 || status === 200) {
+
+          setPatients([])
+
+          setTableItems([])
+          resetForm()
+
+          setIsEditModalOpen(true)
+          setModalData({
+            ...postData,
+            medicamentoList: postData.medicamentos
+          })
+        }
+        if (status === 409) {
+          toast.error('Envie novamente')
+        }
+
+      } catch (err) {
+        toast.error('Falha no sistema! Tente novamente')
+      }
     }
   }
 
@@ -200,134 +209,168 @@ const Dispensation = () => {
           onSubmit={handleSubmitForm}
           validationSchema={validationSchema}
         >
-          {({ values, setFieldValue, touched, errors }) => (
-            <Form>
-              <Flex alignItems='center' justify='space-between'>
-                <Text fontWeight='bold' fontSize='xl'>Dispensação de Medicamentos</Text>
-                <FormControl w='250px'>
-                  <Input
-                    name='date'
-                    variant='unstyled'
-                    value={formattedDate(values.data)}
+          {({ values, setFieldValue, touched, errors }) => {
+            console.log('errors', errors)
+            console.log('values', values)
+            return (
+
+
+              <Form>
+                <Flex alignItems='center' justify='space-between'>
+                  <Text fontWeight='bold' fontSize='xl'>Dispensação de Medicamentos</Text>
+                  <FormControl w='250px'>
+                    <Input
+                      name='date'
+                      variant='unstyled'
+                      value={formattedDate(values.data)}
+                      onChange={e => {
+                        setFieldValue('date', e.target.value)
+                      }}
+                    />
+                  </FormControl>
+                </Flex>
+                <FormControl mt={7} h='80px'>
+                  <FormLabel htmlFor='paciente' color='#808080'>Paciente</FormLabel>
+                  <Select
+                    id='paciente'
+                    name='paciente'
+                    placeholder='Selecione o nome do paciente'
+                    w='73%'
+                    autoFocus
                     onChange={e => {
-                      setFieldValue('date', e.target.value)
+                      const paciente = patients.find(patient => patient.id === e.target.value)
+                      console.log('paciente', paciente, patients)
+                      setFieldValue('paciente', paciente)
                     }}
-                  />
-                </FormControl>
-              </Flex>
-              <FormControl mt={7} h='80px'>
-                <FormLabel htmlFor='paciente' color='#808080'>Paciente</FormLabel>
-                <Select
-                  id='paciente'
-                  name='paciente'
-                  placeholder='Selecione o nome do paciente'
-                  w='73%'
-                  autoFocus
-                  onChange={e => {
-                    const paciente = patients.find(patient => patient.id === Number(e.target.value))
-                    setFieldValue('paciente', paciente)
-                  }}
-                >
-                  {patients && patients.map(patient => (
-                    <option key={patient.id} value={patient.id}>{patient.nome}</option>
-                  ))}
-                </Select>
-                {errors.paciente && touched.paciente && (
-                  <Text
-                    color="#ff0000"
-                    fontSize={14}
-                    fontWeight="500"
-                    pl={1}
-                    position="absolute"
                   >
-                    {errors.paciente.nome}
-                  </Text>
-                )}
-              </FormControl>
-
-              <Flex mt={5} gap={6} w='92%'>
-                <FormControl>
-                  <FormLabel htmlFor="medicamento" color='#808080'>Digite o nome do medicamento</FormLabel>
-                  <MultSelect
-                    inputValue={inputValue}
-                    name='medicamento'
-                    options={itemList.map(item => item.formula)}
-                    onChange={(selectedOption: string) => {
-                      const option = itemList.find((item) => item.formula === selectedOption)
-                      setFieldValue('medicamento', option)
-                      setInputValue(selectedOption)
-                    }}
-                  />
+                    {patients && patients.map(patient => (
+                      <option key={patient.id} value={patient.id}>{patient.nome}</option>
+                    ))}
+                  </Select>
+                  {errors.paciente && touched.paciente && (
+                    <Text
+                      color="#ff0000"
+                      fontSize={14}
+                      fontWeight="500"
+                      pl={1}
+                      position="absolute"
+                    >
+                      Selecione um paciente
+                    </Text>
+                  )}
                 </FormControl>
 
-                <FormControl>
-                  <FormLabel htmlFor="quantidade" color='#808080'>Quantidade</FormLabel>
-                  <Input
-                    id='quantidade'
-                    type="number"
-                    name="quantidade"
-                    placeholder="Quantidade"
-                    value={values.quantidade || ''}
-                    onChange={e => {
-                      setFieldValue('quantidade', Number(e.target.value))
-                    }}
-                  />                 
-                </FormControl>
+                <Flex mt={5} gap={6} w='92%'>
+                  <FormControl>
+                    <FormLabel htmlFor="medicamento" color='#808080'>Digite o nome do medicamento</FormLabel>
+                    <MultSelect
+                      inputValue={inputValue}
+                      name='medicamento'
+                      options={itemList.map(item => item.formula)}
+                      onChange={(selectedOption: string) => {
+                        const option = itemList.find((item) => item.formula === selectedOption)
+                        console.log('option', option)
+                        setFieldValue('medicamento', option)
+                        setInputValue(selectedOption)
+                      }}
+                    />
+                    {errors.medicamento && touched.medicamento && (
+                      <Text
+                        color="#ff0000"
+                        fontSize={14}
+                        fontWeight="500"
+                        pl={1}
+                        position="absolute"
+                      >
+                        Selecione pelo menos um medicamento
+                      </Text>
+                    )}
+                  </FormControl>
 
-                <FormControl display='flex' alignItems='flex-end'>
-                  <Button
-                    name="adicionar"
-                    onClick={(e) => {
-                      handleAddMedicaments({ ...values.medicamento, quantidade: values.quantidade }, e)
-                      setInputValue('')
-                      setFieldValue('quantidade', '')
-                    }}
-                  >Adicionar</Button>
-                </FormControl>
-              </Flex>
+                  <FormControl>
+                    <FormLabel htmlFor="quantidade" color='#808080'>Quantidade</FormLabel>
+                    <Field
+                      as={Input}
+                      id='quantidade'
+                      type="number"
+                      name="quantidade"
+                      placeholder="Quantidade"
+                    // value={values.quantidade || ''}                      
+                    />
+                    {message !== '' && (
+                      <Text
+                        color="#ff0000"
+                        fontSize={14}
+                        fontWeight="500"
+                        pl={1}
+                        position="absolute"
+                      >
+                        {message}
+                      </Text>
+                    )}
+                  </FormControl>
 
-              <Box height="20vh" overflowY="auto" mt={7}>
-                <TableContainer>
-                  <Table variant='simple' size='sm' colorScheme='blue'>
-                    <Thead>
-                      <Tr>
-                        <Th>Nome Medicamento</Th>
-                        <Th>Quantidade</Th>
-                        <Th></Th>
-                      </Tr>
-                    </Thead>
-                    <Tbody>
-                      {tableItems.map((item, index) => (
-                        <Tr key={index}>
-                          <Td>{item.formula}</Td>
-                          <Td>{item.quantidade}</Td>
-                          <Td>
-                            <Flex justify={'end'}>
-                              <Tooltip label='Excluir' fontSize='md' placement='top'>
-                                <Button onClick={() => handleDeleteMedicament(item.id)}>
-                                  <MdDeleteOutline />
-                                </Button>
-                              </Tooltip>
-                            </Flex>
-                          </Td>
+                  <FormControl display='flex' alignItems='flex-end'>
+                    <Button
+                      name="adicionar"
+                      type='button'
+                      onClick={(e) => {
+                        if(values.quantidade === 0) setMessage("Selecione a quantidade do medicamento")
+                        if (values.medicamento && values.quantidade !== 0) {
+
+                          handleAddMedicaments({ ...values.medicamento, quantidade: values.quantidade }, e)
+                          setInputValue('')
+                          setFieldValue('quantidade', 0)
+                          setMessage('')
+                        }
+                      }}
+                    >Adicionar</Button>
+                  </FormControl>
+                </Flex>
+
+                <Box height="20vh" overflowY="auto" mt={7}>
+                  <TableContainer>
+                    <Table variant='simple' size='sm' colorScheme='blue'>
+                      <Thead>
+                        <Tr>
+                          <Th>Nome Medicamento</Th>
+                          <Th>Quantidade</Th>
+                          <Th></Th>
                         </Tr>
-                      ))}
-                    </Tbody>
-                  </Table>
-                </TableContainer>
-              </Box>
-              <Flex justify={'flex-end'}>
-                <Button
-                  mt={10}
-                  variant='outline'
-                  type='submit'
-                  colorScheme='blue'
-                  width='20%'
-                > Dispensar
-                </Button>
-              </Flex>
-            </Form>
-          )}
+                      </Thead>
+                      <Tbody>
+                        {tableItems.map((item, index) => (
+                          <Tr key={index}>
+                            <Td>{item.formula}</Td>
+                            <Td>{item.quantidade}</Td>
+                            <Td>
+                              <Flex justify={'end'}>
+                                <Tooltip label='Excluir' fontSize='md' placement='top'>
+                                  <Button onClick={() => handleDeleteMedicament(item.id)}>
+                                    <MdDeleteOutline />
+                                  </Button>
+                                </Tooltip>
+                              </Flex>
+                            </Td>
+                          </Tr>
+                        ))}
+                      </Tbody>
+                    </Table>
+                  </TableContainer>
+                </Box>
+                <Flex justify={'flex-end'}>
+                  <Button
+                    mt={10}
+                    variant='outline'
+                    type='submit'
+                    colorScheme='blue'
+                    width='20%'
+                  > Dispensar
+                  </Button>
+                </Flex>
+              </Form>
+            )
+          }}
         </Formik>
       </Box>
       <Footer />
