@@ -295,7 +295,7 @@ const Dispensation = () => {
                       type="number"
                       name="quantidade"
                       placeholder="Quantidade"
-                    // value={values.quantidade || ''}                      
+                      value={values.quantidade || ''}                      
                     />
                     {message !== '' && (
                       <Text
